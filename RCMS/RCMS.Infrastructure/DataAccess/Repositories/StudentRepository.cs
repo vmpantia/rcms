@@ -4,7 +4,4 @@ using RCMS.Infrastructure.DataAccess.Repositories.Contracts;
 
 namespace RCMS.Infrastructure.DataAccess.Repositories;
 
-public class StudentRepository : BaseRepository<Student>, IStudentRepository
-{
-    protected StudentRepository(RCMSDbContext context) : base(context) { }
-}
+public sealed class StudentRepository(RCMSDbContext context) : BaseRepository<Student>(context), IStudentRepository;
