@@ -19,7 +19,9 @@ internal static class DbContextExtension
             method?.Invoke(null, new object[] { modelBuilder });
         }
     }
-    
-    private static void ApplyBaseEntityFilter<TEntity>(ModelBuilder builder) where TEntity : BaseEntity =>
+
+    private static void ApplyBaseEntityFilter<TEntity>(ModelBuilder builder) where TEntity : BaseEntity
+    {
         builder.Entity<TEntity>().HasQueryFilter(e => e.DeletedAt == null && string.IsNullOrEmpty(e.DeletedBy));
+    }
 }
