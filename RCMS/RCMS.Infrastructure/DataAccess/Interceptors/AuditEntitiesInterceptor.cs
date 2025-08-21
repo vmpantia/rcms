@@ -24,7 +24,7 @@ public class AuditEntitiesInterceptor(IHttpContextAccessor httpContextAccessor) 
             var entity = entry.Entity;
             
             // Get requestor info if not exist use default
-            var requestor = httpContextAccessor.HttpContext.User?.Identity?.Name ?? "System";
+            var requestor = httpContextAccessor?.HttpContext?.User?.Identity?.Name ?? "System";
 
             switch (entry.State)
             {

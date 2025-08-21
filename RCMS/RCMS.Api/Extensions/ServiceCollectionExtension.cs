@@ -2,12 +2,21 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using RCMS.Infrastructure.DataAccess.Contexts;
+using RCMS.Infrastructure.DataAccess.Seeds;
 using RCMS.Shared.Settings;
 
 namespace RCMS.Api.Extensions;
 
 public static class ServiceCollectionExtension
 {
+    public static async Task GenerateDummyDataAsync(this WebApplication webApplication)
+    {
+        using var scope = webApplication.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<RCMSDbContext>();
+        await DummyDataHelper.GenerateAsync(db);
+    }
+    
     public static void AddSwaggerGenWithAuth(this IServiceCollection services)
     {
         services.AddSwaggerGen(opt =>

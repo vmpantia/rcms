@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RCMS.Infrastructure.DataAccess.Contexts;
 
@@ -11,9 +12,11 @@ using RCMS.Infrastructure.DataAccess.Contexts;
 namespace RCMS.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(RCMSDbContext))]
-    partial class RCMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250821174357_MakeMiddleNameNullableToStudentsAndInstructorsTable")]
+    partial class MakeMiddleNameNullableToStudentsAndInstructorsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,5 +1,7 @@
 using RCMS.Api.Extensions;
 using RCMS.Core.Extensions;
+using RCMS.Infrastructure.DataAccess.Contexts;
+using RCMS.Infrastructure.DataAccess.Seeds;
 using RCMS.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +33,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    await app.GenerateDummyDataAsync();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -45,3 +48,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
