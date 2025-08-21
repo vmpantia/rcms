@@ -3,7 +3,7 @@ using RCMS.Shared.Enumerations;
 
 namespace RCMS.Infrastructure.DataAccess.Entities;
 
-public class Instructor : IPersonalInfoEntity
+public class Instructor : BaseEntity, IPersonalInfoEntity
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; }
