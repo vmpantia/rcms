@@ -1,0 +1,29 @@
+
+<MudTooltip Text="@(Value.HasValue ? $"{Value?.ToString(_format)} {TimeZoneInfo.Utc.DisplayName}" : string.Empty)">
+    <MudText Typo="Typo.body2">
+        @_valueToShow
+        <MudText Class="mud-secondary-text" Style="font-size: x-small; font-style: italic;">
+            @(string.IsNullOrWhiteSpace(SecondaryText)
+                ? TimeZoneInfo.Local.DisplayName
+                : $"{SecondaryText} | {TimeZoneInfo.Local.DisplayName}")
+        </MudText>
+    </MudText>
+</MudTooltip>
+
+@code {
+    [Parameter] public DateTime? Value { get; set; }
+    [Parameter] public string SecondaryText { get; set; }
+
+    private readonly string _format = "yyyy-MM-dd hh:mm:ss tt";
+    private string _valueToShow = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        if (Value == null) return;
+
+        // Convert UTC time to user's local timezone
+        var localTime = TimeZoneInfo.ConvertTimeFromUtc((DateTime)Value!, TimeZoneInfo.Local);
+        _valueToShow = localTime.ToString(_format);
+    }
+
+}

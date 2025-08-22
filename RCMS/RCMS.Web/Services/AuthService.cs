@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
 using RCMS.Shared.Models.Users;
 using RCMS.Web.Providers;
 using RCMS.Web.Providers.Contracts;
@@ -8,9 +9,9 @@ using RCMS.Web.Services.Contracts;
 namespace RCMS.Web.Services;
 
 public class AuthService(IHttpClientProvider httpClientProvider, AuthenticationStateProvider authenticationStateProvider, 
-    NavigationManager navigationManager, ILogger<AuthService> logger) : IAuthService
+    NavigationManager navigationManager, ISnackbar snackbar, ILogger<AuthService> logger) : 
+    BaseService<AuthService>(snackbar, logger), IAuthService
 {
-    
     public async Task LoginAsync(LoginUserDto login)
     {
         try
@@ -30,17 +31,23 @@ public class AuthService(IHttpClientProvider httpClientProvider, AuthenticationS
         }
         catch (Exception ex)
         {
-            logger.LogError($"Error in processing login request | Message: {ex.Message}");
-            throw;
+            HandleUnexpectedError(ex, "Error in processing login request.");
         }
     }
 
     public async Task LogoutAsync()
     {
-        // Mark user as logged out using the custom authentication state provider
-        await ((CustomAuthenticationStateProvider)authenticationStateProvider).MarkUserAsLoggedOut();
+        try
+        {
+            // Mark user as logged out using the custom authentication state provider
+            await ((CustomAuthenticationStateProvider)authenticationStateProvider).MarkUserAsLoggedOut();
 
-        // Redirect user to the login page
-        navigationManager.NavigateTo("/login");
+            // Redirect user to the login page
+            navigationManager.NavigateTo("/login");
+        }
+        catch (Exception ex)
+        {
+            HandleUnexpectedError(ex, "Error in processing logout request.");
+        }
     }
 }

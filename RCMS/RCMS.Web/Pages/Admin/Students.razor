@@ -1,14 +1,45 @@
 @page "/Students"
 @using Microsoft.AspNetCore.Authorization
 @using RCMS.Shared.Enumerations
+@using RCMS.Shared.Models.Students
+@using RCMS.Web.Services.Contracts
+@using RCMS.Web.Components.Chips
+@using RCMS.Web.Components.Texts
 
 @attribute [Authorize(Roles = nameof(UserRole.Admin))]
 
 <PageContent Title="Students" Description="List of students stored on our database.">
     <ChildComponent>
         <MudGrid>
-            <MudItem>
-                <MudText>TEST</MudText>
+            <MudItem xs="12">
+                <MudDataGrid Items="_students" Loading="_isLoading" Dense="true">
+                    <Columns>
+                        <PropertyColumn Property="sld => sld.Name" Title="Name" />
+                        <PropertyColumn Property="sld => sld.PhoneNumber" Title="Phone Number" />
+                        <PropertyColumn Property="sld => sld.EmailAddress" Title="Email" />
+                        <PropertyColumn Property="sld => sld.NoOfOngoingEnrollments" Title="No. of Ongoing Enrollments" />
+                        <TemplateColumn Title="Status" Sortable="true" SortBy="sld => sld.Status">
+                            <CellTemplate>
+                                <StudentStatusChip Status="@context.Item.Status" />
+                            </CellTemplate>
+                        </TemplateColumn>
+                        <TemplateColumn Title="Last Modified" Sortable="true"  SortBy="sld => sld.LastModifiedAt">
+                            <CellTemplate>
+                                <DateTimeText Value="@context.Item.LastModifiedAt"
+                                              SecondaryText="@context.Item.LastModifiedBy" />
+                            </CellTemplate>
+                        </TemplateColumn>
+                    </Columns>
+                    <PagerContent>
+                        <MudDataGridPager T="StudentLiteDto" />
+                    </PagerContent>
+                    <NoRecordsContent>
+                        <MudText>No record found at this moment.</MudText>
+                    </NoRecordsContent>
+                    <LoadingContent>
+                        <MudText>Loading...</MudText>
+                    </LoadingContent>
+                </MudDataGrid>
             </MudItem>
         </MudGrid>
     </ChildComponent>
@@ -16,4 +47,17 @@
 
 @code {
     
+    [Inject] public IStudentService StudentService { get; set; }
+
+    private IEnumerable<StudentLiteDto> _students = new List<StudentLiteDto>();
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+
+        _students = await StudentService.GetStudentsAsync();
+        
+        _isLoading = false;
+    }
 }
