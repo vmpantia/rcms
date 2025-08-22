@@ -1,27 +1,43 @@
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inherits LayoutComponentBase
 
-@* Required *@
 <MudThemeProvider />
 <MudPopoverProvider />
-
-@* Needed for dialogs *@
 <MudDialogProvider />
-
-@* Needed for snackbars *@
 <MudSnackbarProvider />
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu/>
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+        <MudText Class="ml-2">Review Center Management System</MudText>
+        <MudSpacer />
+        <MudAvatar Color="Color.Info">VP</MudAvatar>
+    </MudAppBar>
+    <MudDrawer Elevation="1" @bind-Open="@_isDrawerOpen" ClipMode="DrawerClipMode.Always">
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer Class="mt-6">
             @Body
-        </article>
-    </main>
-</div>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; }
+
+    private bool _isDrawerOpen = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Get authentication state based on the cascading parameter
+        var state = await AuthenticationState;
+
+        // Redirect user to log in when it's not authenticated
+        if ((state.User.Identity?.IsAuthenticated ?? false) == false)
+            NavigationManager.NavigateTo("/login");
+    }
+
+    private void ToggleDrawer() => _isDrawerOpen = !_isDrawerOpen;
+}
