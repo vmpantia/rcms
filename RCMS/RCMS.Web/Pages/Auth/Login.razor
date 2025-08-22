@@ -31,10 +31,8 @@
                                Disabled="IsFieldsDisabled"/>
                 </MudItem>
                 <MudItem xs="12">
-                    <TextField Label="Password"
+                    <PasswordField Label="Password"
                                @bind-Value="_login.Password" For="@(() => _login.Password)"
-                               InputType="@_passwordInputType"
-                               Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="ShowOrHidePassword" AdornmentAriaLabel="Show Password"
                                Disabled="IsFieldsDisabled"/>
                 </MudItem>
                 <MudItem xs="12">
@@ -63,10 +61,6 @@
     private LoginUserDto _login = new();
     private bool _isLoading = false;
     private string _errorMessage = string.Empty;
-    
-    private bool _isShowPassword = false;
-    private InputType _passwordInputType = InputType.Password;
-    private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
 
     private bool HasError => !string.IsNullOrEmpty(_errorMessage);
     private bool IsFieldsDisabled => _isLoading;
@@ -86,12 +80,5 @@
         {
             _isLoading = false;
         }
-    }
-
-    private void ShowOrHidePassword()
-    {
-        _isShowPassword = !_isShowPassword;
-        _passwordInputIcon = _isShowPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff;
-        _passwordInputType = _isShowPassword ? InputType.Text : InputType.Password;
     }
 }
