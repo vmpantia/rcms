@@ -7,17 +7,17 @@
 /modules.xml
 /projectSettingsUpdater.xml
 /contentModel.xml
-/.idea.hrisapp.iml
+/.idea.rcms.iml
 # Editor-based HTTP Client requests
 /httpRequests/
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-/HRIS/.vs/HRIS/v17/.suo
-/HRIS/.vs/HRIS/v17/DocumentLayout.json
-/HRIS/.vs/ProjectEvaluation/hris.metadata.v9.bin
-/HRIS/.vs/ProjectEvaluation/hris.projects.v9.bin
-/HRIS/.vs/ProjectEvaluation/hris.strings.v9.bin
+/RCMS/.vs/RCMS/v17/.suo
+/RCMS/.vs/RCMS/v17/DocumentLayout.json
+/RCMS/.vs/ProjectEvaluation/rcms.metadata.v9.bin
+/RCMS/.vs/ProjectEvaluation/rcms.projects.v9.bin
+/RCMS/.vs/ProjectEvaluation/rcms.strings.v9.bin
 /.idea/indexLayout.xml
 /RCMS/.idea/.idea.RCMS/.idea/indexLayout.xml
 /.idea/vcs.xml

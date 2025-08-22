@@ -26,6 +26,11 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         return _table.Where(expression);
     }
 
+    public async Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
+    {
+        return await _table.FirstOrDefaultAsync(expression, cancellationToken);
+    }
+
     public async Task<bool> IsExistAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
     {
         return await _table.AnyAsync(expression, cancellationToken);

@@ -13,6 +13,7 @@ public class RCMSDbContext : DbContext
     public DbSet<Instructor> Instructors { get; set; }
     public DbSet<Schedule> Schedules { get; set; }
     public DbSet<Student> Students { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -56,6 +57,11 @@ public class RCMSDbContext : DbContext
         modelBuilder.Entity<Student>(builder =>
         {
             builder.HasKey(s => s.Id);
+        });
+
+        modelBuilder.Entity<User>(builder =>
+        {
+            builder.HasKey(u => u.Id);
         });
     }
 }
