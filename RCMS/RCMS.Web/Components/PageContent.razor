@@ -1,0 +1,18 @@
+<PageTitle>Title</PageTitle>
+
+<div class="pa-5">
+    <div class="mb-3">
+        <MudText Typo="Typo.h6" Style="font-weight: bold;">@Title</MudText>
+        @if (!string.IsNullOrWhiteSpace(Description))
+        {
+            <MudText Typo="Typo.body2">@Description</MudText>
+        }
+    </div>
+    @ChildComponent
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Description { get; set; }
+    [Parameter] public RenderFragment ChildComponent { get; set; }
+}

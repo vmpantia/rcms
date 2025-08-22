@@ -27,20 +27,22 @@
                 }
                 <MudItem xs="12">
                     <TextField Label="Username or Email"
-                               @bind-Value="_login.UsernameOrEmailAddress" For="@(() => _login.UsernameOrEmailAddress)"
-                               Disabled="IsFieldsDisabled"/>
+                               @bind-Value="_login.UsernameOrEmailAddress"
+                               For="@(() => _login.UsernameOrEmailAddress)"
+                               IsDisabled="IsFieldsDisabled"/>
                 </MudItem>
                 <MudItem xs="12">
                     <PasswordField Label="Password"
-                               @bind-Value="_login.Password" For="@(() => _login.Password)"
-                               Disabled="IsFieldsDisabled"/>
+                                   @bind-Value="_login.Password" 
+                                   For="@(() => _login.Password)"
+                                   IsDisabled="IsFieldsDisabled"/>
                 </MudItem>
                 <MudItem xs="12">
                     <Button Type="ButtonType.Submit" 
                             IsDisabled="IsFieldsDisabled" 
                             IsLoading="_isLoading" 
                             Text="Login"
-                            LoadingText="Processing" />
+                            LoadingText="Processing"></Button>
                 </MudItem>
             </MudGrid>
         </EditForm>
