@@ -36,19 +36,11 @@
                                Disabled="IsFieldsDisabled"/>
                 </MudItem>
                 <MudItem xs="12">
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"
-                               FullWidth="true"
-                               Disabled="IsFieldsDisabled">
-                        @if (_isLoading)
-                        {
-                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                            <MudText Class="ms-2">Processing</MudText>
-                        }
-                        else
-                        {
-                            <MudText>Login</MudText>
-                        }
-                    </MudButton>
+                    <Button Type="ButtonType.Submit" 
+                            IsDisabled="IsFieldsDisabled" 
+                            IsLoading="_isLoading" 
+                            Text="Login"
+                            LoadingText="Processing" />
                 </MudItem>
             </MudGrid>
         </EditForm>
@@ -70,6 +62,7 @@
         try
         {
             _isLoading = true;
+            _errorMessage = string.Empty;
             await AuthService.LoginAsync(_login);
         }
         catch (Exception ex)
