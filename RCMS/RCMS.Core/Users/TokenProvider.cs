@@ -3,8 +3,10 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using RCMS.Core.Extensions;
 using RCMS.Core.Users.Contracts;
 using RCMS.Infrastructure.DataAccess.Entities;
+using RCMS.Shared;
 using RCMS.Shared.Models.Users;
 using RCMS.Shared.Settings;
 
@@ -26,8 +28,10 @@ public sealed class TokenProvider(JwtSetting jwtSetting, ILogger<TokenProvider> 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity([
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(Constant.CLAIM_TYPE_USER_ID, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.GetFormattedName()),
+                    new Claim(Constant.CLAIM_TYPE_USERNAME, user.Username),
+                    new Claim(Constant.CLAIM_TYPE_INITIALS, user.GetInitials()),
                     new Claim(ClaimTypes.Email, user.EmailAddress),
                     new Claim(ClaimTypes.Role, user.Role.ToString()),
                 ]),

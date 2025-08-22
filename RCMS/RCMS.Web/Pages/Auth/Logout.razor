@@ -1,0 +1,8 @@
+@page "/logout"
+@using RCMS.Web.Services.Contracts
+
+@code {
+    [Inject] public IAuthService AuthService { get; set; }
+    
+    protected override async Task OnInitializedAsync() => await AuthService.LogoutAsync();
+}

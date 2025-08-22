@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
+@using RCMS.Shared
+@using RCMS.Shared.Extensions
 @inherits LayoutComponentBase
 
 <MudThemeProvider />
@@ -11,7 +13,9 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
         <MudText Class="ml-2">Review Center Management System</MudText>
         <MudSpacer />
-        <MudAvatar Color="Color.Info">VP</MudAvatar>
+        <AuthorizeView>
+            <MudAvatar Color="Color.Info">@context.User.GetClaimValue(Constant.CLAIM_TYPE_INITIALS)</MudAvatar>
+        </AuthorizeView>
     </MudAppBar>
     <MudDrawer Elevation="1" @bind-Open="@_isDrawerOpen" ClipMode="DrawerClipMode.Always">
         <NavMenu />
