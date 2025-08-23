@@ -21,7 +21,7 @@
                 {
                     <MudItem xs="12">
                         <MudAlert Severity="Severity.Error">
-                            @_errorMessage
+                            @((MarkupString)_errorMessage)
                         </MudAlert>
                     </MudItem>
                 }
@@ -63,9 +63,9 @@
     {
         try
         {
+            _errorMessage = string.Empty;
             _isLoading = true;
             
-            _errorMessage = string.Empty;
             await AuthService.LoginAsync(_login);
         }
         catch (Exception ex)

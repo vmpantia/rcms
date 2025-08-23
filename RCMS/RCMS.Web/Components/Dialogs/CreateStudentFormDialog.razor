@@ -1,3 +1,4 @@
+@using RCMS.Shared.Enumerations
 @using RCMS.Shared.Models.Students
 @using RCMS.Web.Components.Validations
 @using RCMS.Web.Services.Contracts
@@ -7,15 +8,18 @@
     <DialogContent>
         <EditForm Model="_student" OnValidSubmit="HandleCreateStudentAsync">
             <FluentValidationValidator T="CreateStudentDto" />
-            <MudGrid>
+            <MudGrid Class="mb-5">
                 @if (HasError)
                 {
                     <MudItem xs="12">
                         <MudAlert Severity="Severity.Error">
-                            @_errorMessage
+                            @((MarkupString)_errorMessage)
                         </MudAlert>
                     </MudItem>
                 }
+                <MudItem xs="12">
+                    <MudText Typo="Typo.button">Personal Information</MudText>
+                </MudItem>
                 <MudItem xs="4">
                     <TextField Label="First Name"
                                @bind-Value="_student.FirstName"
@@ -35,6 +39,22 @@
                                IsDisabled="IsFieldsDisabled"/>
                 </MudItem>
                 <MudItem xs="6">
+                    <SelectField Label="Gender"
+                                 @bind-Value="_student.Gender"
+                                 For="@(() => _student.Gender)"
+                                 IsDisabled="IsFieldsDisabled"
+                                 Options="@(Enum.GetValues<GenderType>().Select(gt => gt.ToString()))"/>
+                </MudItem>
+                <MudItem xs="6">
+                    <DateTimeField Label="Birthdate"
+                                   @bind-Date="_student.BirthDate"
+                                   For="@(() => _student.BirthDate)"
+                                   IsDisabled="IsFieldsDisabled"/>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudText Typo="Typo.button">Contact Information</MudText>
+                </MudItem>
+                <MudItem xs="6">
                     <TextField Label="Phone Number"
                                @bind-Value="_student.PhoneNumber"
                                For="@(() => _student.PhoneNumber)"
@@ -46,7 +66,7 @@
                                For="@(() => _student.EmailAddress)"
                                IsDisabled="IsFieldsDisabled"/>
                 </MudItem>
-                <MudItem xs="12">
+                <MudItem Class="mt-2" xs="12">
                     <Button Type="ButtonType.Submit" 
                             IsDisabled="IsFieldsDisabled" 
                             IsLoading="_isCreating" 
@@ -60,6 +80,9 @@
 
 @code {
     [Inject] public IStudentService StudentService { get; set; }
+    [Inject] public ISnackbar Snackbar { get; set; }
+
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
     
     private CreateStudentDto _student = new ();
     private bool _isCreating = false;
@@ -72,10 +95,14 @@
     {
         try
         {
+            _errorMessage = string.Empty;
             _isCreating = true;
             
-            _errorMessage = string.Empty;
             await StudentService.CreateStudentAsync(_student);
+            
+            // Alert user for success request and close dialog
+            Snackbar.Add("Student created successfully.", Severity.Success);
+            MudDialog.Close(DialogResult.Ok(true));
         }
         catch (Exception ex)
         {

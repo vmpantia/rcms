@@ -2,12 +2,17 @@
 
 @typeparam T
 
-<MudTextField Label="@Label" Placeholder="@Placeholder" Value="@Value" ValueChanged="@ValueChanged" 
-              For="@For" Disabled="@IsDisabled" 
-              Variant="Variant.Outlined" Margin="Margin.Dense" 
-              HelperText="@HelperText" />
+<MudSelect Label="@Label" Placeholder="@Placeholder" Value="@Value" ValueChanged="@ValueChanged" 
+           For="@For" Disabled="@IsDisabled" Variant="Variant.Outlined" Margin="Margin.Dense" 
+           HelperText="@HelperText" Clearable="true">
+    @foreach (var option in Options)
+    {
+        <MudSelectItem Value="option">@option</MudSelectItem>
+    }
+</MudSelect>
 
 @code {
+
     [Parameter] public string Label { get; set; }
     [Parameter] public string Placeholder { get; set; }
     [Parameter] public T Value { get; set; }
@@ -15,4 +20,6 @@
     [Parameter] public Expression<Func<T>> For { get; set; }
     [Parameter] public bool IsDisabled { get; set; }
     [Parameter] public string HelperText { get; set; }
+    [Parameter] public IEnumerable<T> Options { get; set; }
+    
 }

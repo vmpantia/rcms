@@ -1,0 +1,16 @@
+@using System.Linq.Expressions
+<MudDatePicker Label="@Label" Placeholder="@Placeholder" Date="@Date" DateChanged="@DateChanged" 
+               For="@For" Disabled="@IsDisabled" Variant="Variant.Outlined" Margin="Margin.Dense" 
+               HelperText="@HelperText" Clearable="true"/>
+
+@code {
+    
+    [Parameter] public string Label { get; set; }
+    [Parameter] public string Placeholder { get; set; }
+    [Parameter] public DateTime? Date { get; set; }
+    [Parameter] public EventCallback<DateTime?> DateChanged { get; set; }
+    [Parameter] public Expression<Func<DateTime?>> For { get; set; }
+    [Parameter] public bool IsDisabled { get; set; }
+    [Parameter] public string HelperText { get; set; }
+    
+}

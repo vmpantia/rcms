@@ -22,9 +22,9 @@
                 <DataGrid Items="_students"
                           IsLoading="_isLoading">
                     <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.Name"/>
-                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.PhoneNumber"/>
-                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.EmailAddress"/>
-                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.NoOfOngoingEnrollments.ToString()"/>
+                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Phone Number" Property="s => s.PhoneNumber"/>
+                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Email Address" Property="s => s.EmailAddress"/>
+                    <DataGridPropertyColumn TData="StudentLiteDto" Title="No of Ongoing Enrollments" Property="s => s.NoOfOngoingEnrollments.ToString()"/>
                     <DataGridTemplateColumn TData="StudentLiteDto" Title="Status" IsSortable="true" SortBy="s => s.Status">
                         <StudentStatusChip Status="@context.Status"/>
                     </DataGridTemplateColumn>
@@ -65,9 +65,17 @@
         }
     }
 
-    private Task OpenCreateStudentFormDialog()
+    private async Task OpenCreateStudentFormDialog()
     {
-        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
-        return DialogService.ShowAsync<CreateStudentFormDialog>("Delete", options);
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium };
+        var dialogReference = await DialogService.ShowAsync<CreateStudentFormDialog>("Create Student", options);
+        var dialogResult = await dialogReference.Result;
+        
+        // Handle a success dialog result
+        if (dialogResult is { Canceled: false, Data: true })
+        {
+            await OnInitializedAsync();
+            StateHasChanged();
+        }
     } 
 }

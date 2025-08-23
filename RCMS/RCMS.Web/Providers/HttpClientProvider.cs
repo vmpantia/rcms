@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
+using RCMS.Shared.Extensions;
 using RCMS.Shared.Responses;
 using RCMS.Web.Providers.Contracts;
 
@@ -90,6 +91,6 @@ public class HttpClientProvider(HttpClient httpClient, ILocalStorageService loca
         if (result is not null && result.IsSuccess && response.IsSuccessStatusCode)
             return result.Data!;
 
-        throw new Exception(result?.Error?.Message ?? content);
+        throw new Exception(result?.Error?.GetMessage());
     }
 }
