@@ -6,6 +6,8 @@
 @using RCMS.Web.Components.Chips
 @using RCMS.Web.Components.Texts
 @using RCMS.Web.Components.Tables
+@using RCMS.Web.Components.Controls
+@using RCMS.Web.Components.Dialogs
 
 @attribute [Authorize(Roles = nameof(UserRole.Admin))]
 
@@ -13,18 +15,22 @@
     <ChildComponent>
         <MudGrid>
             <MudItem xs="12">
+                <Button Text="Create Student" 
+                        OnButtonClick="OpenCreateStudentFormDialog" />
+            </MudItem>
+            <MudItem xs="12">
                 <DataGrid Items="_students"
                           IsLoading="_isLoading">
-                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.Name" />
-                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.PhoneNumber" />
-                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.EmailAddress" />
-                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.NoOfOngoingEnrollments.ToString()" />
+                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.Name"/>
+                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.PhoneNumber"/>
+                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.EmailAddress"/>
+                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.NoOfOngoingEnrollments.ToString()"/>
                     <DataGridTemplateColumn TData="StudentLiteDto" Title="Status" IsSortable="true" SortBy="s => s.Status">
                         <StudentStatusChip Status="@context.Status"/>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn TData="StudentLiteDto" Title="Status" IsSortable="true" SortBy="s => s.LastModifiedAt">
-                        <DateTimeText Value="@context.LastModifiedAt" 
-                                      SecondaryText="@context.LastModifiedBy" />
+                        <DateTimeText Value="@context.LastModifiedAt"
+                                      SecondaryText="@context.LastModifiedBy"/>
                     </DataGridTemplateColumn>
                 </DataGrid>
             </MudItem>
@@ -35,16 +41,33 @@
 @code {
     
     [Inject] public IStudentService StudentService { get; set; }
+    [Inject] public ISnackbar Snackbar { get; set; }
+    [Inject] public IDialogService DialogService { get; set; }
 
     private IEnumerable<StudentLiteDto> _students = new List<StudentLiteDto>();
     private bool _isLoading = true;
 
     protected override async Task OnInitializedAsync()
     {
-        _isLoading = true;
-        
-        _students = await StudentService.GetStudentsAsync();
-        
-        _isLoading = false;
+        try
+        {
+            _isLoading = true;
+
+            _students = await StudentService.GetStudentsAsync();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+        finally
+        {
+            _isLoading = false;
+        }
     }
+
+    private Task OpenCreateStudentFormDialog()
+    {
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
+        return DialogService.ShowAsync<CreateStudentFormDialog>("Delete", options);
+    } 
 }

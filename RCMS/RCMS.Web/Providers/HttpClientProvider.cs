@@ -11,13 +11,13 @@ namespace RCMS.Web.Providers;
 public class HttpClientProvider(HttpClient httpClient, ILocalStorageService localStorageService,
     NavigationManager navigationManager, ILogger<HttpClientProvider> logger) : IHttpClientProvider
 {
-    public async Task<TData> GetAsync<TData>(string uri) where TData : class =>
+    public async Task<TData> GetAsync<TData>(string uri) =>
         await SendRequestAsync<TData>(HttpMethod.Get, uri);
 
-    public async Task<TData> PostAsync<TData>(string uri, object data) where TData : class =>
+    public async Task<TData> PostAsync<TData>(string uri, object data) =>
         await SendRequestAsync<TData>(HttpMethod.Post, uri, data);
 
-    public async Task<TData> PutAsync<TData>(string uri, object data) where TData : class =>
+    public async Task<TData> PutAsync<TData>(string uri, object data) =>
         await SendRequestAsync<TData>(HttpMethod.Put, uri, data);
 
     private async Task SetAuthorizeHeaderAsync()
@@ -33,7 +33,6 @@ public class HttpClientProvider(HttpClient httpClient, ILocalStorageService loca
     }
 
     private async Task<TData> SendRequestAsync<TData>(HttpMethod method, string uri, object? data = null)
-        where TData : class
     {
         try
         {
@@ -76,7 +75,6 @@ public class HttpClientProvider(HttpClient httpClient, ILocalStorageService loca
     }
 
     private async Task<TData> HandleResponseAsync<TData>(HttpRequestMessage request, HttpResponseMessage response) 
-        where TData : class
     {
         // Throw unauthorized access when status code is Unauthorized
         if (response.StatusCode is HttpStatusCode.Unauthorized)

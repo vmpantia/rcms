@@ -6,6 +6,6 @@ namespace RCMS.Shared.Extensions;
 
 public static class ServiceCollectionExtension
 {
-    public static void AddSharedValidators(this IServiceCollection services) =>
+    public static void AddValidators(this IServiceCollection services) =>
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 }

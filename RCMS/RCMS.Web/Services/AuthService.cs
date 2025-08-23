@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using MudBlazor;
 using RCMS.Shared.Models.Users;
 using RCMS.Web.Providers;
 using RCMS.Web.Providers.Contracts;
@@ -9,8 +8,7 @@ using RCMS.Web.Services.Contracts;
 namespace RCMS.Web.Services;
 
 public class AuthService(IHttpClientProvider httpClientProvider, AuthenticationStateProvider authenticationStateProvider, 
-    NavigationManager navigationManager, ISnackbar snackbar, ILogger<AuthService> logger) : 
-    BaseService<AuthService>(snackbar, logger), IAuthService
+    NavigationManager navigationManager, ILogger<AuthService> logger) : IAuthService
 {
     public async Task LoginAsync(LoginUserDto login)
     {
@@ -31,7 +29,8 @@ public class AuthService(IHttpClientProvider httpClientProvider, AuthenticationS
         }
         catch (Exception ex)
         {
-            HandleUnexpectedError(ex, "Error in processing login request.");
+            logger.LogError($"Error in processing login request. | {ex.Message}");
+            throw;
         }
     }
 
@@ -47,7 +46,8 @@ public class AuthService(IHttpClientProvider httpClientProvider, AuthenticationS
         }
         catch (Exception ex)
         {
-            HandleUnexpectedError(ex, "Error in processing logout request.");
+            logger.LogError($"Error in processing logout request. | {ex.Message}");
+            throw;
         }
     }
 }

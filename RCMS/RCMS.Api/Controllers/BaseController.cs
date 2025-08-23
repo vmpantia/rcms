@@ -13,7 +13,7 @@ public class BaseController : ControllerBase
     private readonly IMediator _mediator;
     protected BaseController(IMediator mediator) => _mediator = mediator;
     
-    protected async Task<IActionResult> SendRequestAsync<TResponse>(IRequest<Result<TResponse>> request) where TResponse : class
+    protected async Task<IActionResult> SendRequestAsync<TResponse>(IRequest<Result<TResponse>> request)
     {
         try
         {

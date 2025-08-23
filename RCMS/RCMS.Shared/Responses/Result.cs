@@ -2,7 +2,7 @@ using RCMS.Shared.Responses.Errors;
 
 namespace RCMS.Shared.Responses;
 
-public class Result<TData> where TData : class
+public class Result<TData>
 {
     public Result() { }
     

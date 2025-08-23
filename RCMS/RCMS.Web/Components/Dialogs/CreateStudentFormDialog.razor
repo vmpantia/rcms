@@ -1,0 +1,89 @@
+@using RCMS.Shared.Models.Students
+@using RCMS.Web.Components.Validations
+@using RCMS.Web.Services.Contracts
+@using RCMS.Web.Components.Controls
+
+<MudDialog>
+    <DialogContent>
+        <EditForm Model="_student" OnValidSubmit="HandleCreateStudentAsync">
+            <FluentValidationValidator T="CreateStudentDto" />
+            <MudGrid>
+                @if (HasError)
+                {
+                    <MudItem xs="12">
+                        <MudAlert Severity="Severity.Error">
+                            @_errorMessage
+                        </MudAlert>
+                    </MudItem>
+                }
+                <MudItem xs="4">
+                    <TextField Label="First Name"
+                               @bind-Value="_student.FirstName"
+                               For="@(() => _student.FirstName)"
+                               IsDisabled="IsFieldsDisabled"/>
+                </MudItem>
+                <MudItem xs="4">
+                    <TextField Label="Middle Name"
+                               @bind-Value="_student.MiddleName"
+                               For="@(() => _student.MiddleName)"
+                               IsDisabled="IsFieldsDisabled"/>
+                </MudItem>
+                <MudItem xs="4">
+                    <TextField Label="Last Name"
+                               @bind-Value="_student.LastName"
+                               For="@(() => _student.LastName)"
+                               IsDisabled="IsFieldsDisabled"/>
+                </MudItem>
+                <MudItem xs="6">
+                    <TextField Label="Phone Number"
+                               @bind-Value="_student.PhoneNumber"
+                               For="@(() => _student.PhoneNumber)"
+                               IsDisabled="IsFieldsDisabled"/>
+                </MudItem>
+                <MudItem xs="6">
+                    <TextField Label="Email Address"
+                               @bind-Value="_student.EmailAddress"
+                               For="@(() => _student.EmailAddress)"
+                               IsDisabled="IsFieldsDisabled"/>
+                </MudItem>
+                <MudItem xs="12">
+                    <Button Type="ButtonType.Submit" 
+                            IsDisabled="IsFieldsDisabled" 
+                            IsLoading="_isCreating" 
+                            Text="Create"
+                            LoadingText="Creating"></Button>
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [Inject] public IStudentService StudentService { get; set; }
+    
+    private CreateStudentDto _student = new ();
+    private bool _isCreating = false;
+    private string _errorMessage = string.Empty;
+    
+    private bool HasError => !string.IsNullOrEmpty(_errorMessage);
+    private bool IsFieldsDisabled => _isCreating;
+
+    private async Task HandleCreateStudentAsync()
+    {
+        try
+        {
+            _isCreating = true;
+            
+            _errorMessage = string.Empty;
+            await StudentService.CreateStudentAsync(_student);
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+        }
+        finally
+        {
+            _isCreating = false;
+        }
+    }
+}

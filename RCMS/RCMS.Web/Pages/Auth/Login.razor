@@ -64,6 +64,7 @@
         try
         {
             _isLoading = true;
+            
             _errorMessage = string.Empty;
             await AuthService.LoginAsync(_login);
         }

@@ -5,21 +5,34 @@ using RCMS.Web.Services.Contracts;
 
 namespace RCMS.Web.Services;
 
-public class StudentService(IHttpClientProvider httpClientProvider, ISnackbar snackbar, ILogger<AuthService> logger) : 
-    BaseService<AuthService>(snackbar, logger), IStudentService
+public class StudentService(IHttpClientProvider httpClientProvider, ILogger<AuthService> logger) : IStudentService
 {
     public async Task<IEnumerable<StudentLiteDto>> GetStudentsAsync()
     {
         try
         {
-            // Send login request to API
+            // Send getting of student request to API
             var students = await httpClientProvider.GetAsync<IEnumerable<StudentLiteDto>>("https://localhost:7226/api/Students");
             return students;
         }
         catch (Exception ex)
         {
-            HandleUnexpectedError(ex, "Error in getting students.");
-            return [];
+            logger.LogError($"Error in getting students. | {ex.Message}");
+            throw;
+        }
+    }
+    
+    public async Task CreateStudentAsync(CreateStudentDto request)
+    {
+        try
+        {
+            // Send creating of student request to API
+            await httpClientProvider.PostAsync<Guid>("https://localhost:7226/api/Students", request);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError($"Error in creating student. | {ex.Message}");
+            throw;
         }
     }
 }
