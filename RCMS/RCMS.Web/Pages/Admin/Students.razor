@@ -15,19 +15,17 @@
             <MudItem xs="12">
                 <DataGrid Items="_students"
                           IsLoading="_isLoading">
-                    <Columns>
-                        <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.Name" />
-                        <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.PhoneNumber" />
-                        <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.EmailAddress" />
-                        <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.NoOfOngoingEnrollments.ToString()" />
-                        <DataGridTemplateColumn TData="StudentLiteDto" Title="Status" IsSortable="true" SortBy="s => s.Status">
-                            <StudentStatusChip Status="@context.Status"/>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn TData="StudentLiteDto" Title="Status" IsSortable="true" SortBy="s => s.LastModifiedAt">
-                            <DateTimeText Value="@context.LastModifiedAt" 
-                                          SecondaryText="@context.LastModifiedBy" />
-                        </DataGridTemplateColumn>
-                    </Columns>
+                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.Name" />
+                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.PhoneNumber" />
+                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.EmailAddress" />
+                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.NoOfOngoingEnrollments.ToString()" />
+                    <DataGridTemplateColumn TData="StudentLiteDto" Title="Status" IsSortable="true" SortBy="s => s.Status">
+                        <StudentStatusChip Status="@context.Status"/>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn TData="StudentLiteDto" Title="Status" IsSortable="true" SortBy="s => s.LastModifiedAt">
+                        <DateTimeText Value="@context.LastModifiedAt" 
+                                      SecondaryText="@context.LastModifiedBy" />
+                    </DataGridTemplateColumn>
                 </DataGrid>
             </MudItem>
         </MudGrid>

@@ -4,7 +4,7 @@
              Loading="IsLoading" 
              Dense="true">
     <Columns>
-        @Columns
+        @ChildContent
     </Columns>
     <PagerContent>
         <MudDataGridPager T="TData" />
@@ -20,6 +20,6 @@
 @code {
     
     [Parameter] public IEnumerable<TData> Items { get; set; }
-    [Parameter] public RenderFragment Columns { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
     [Parameter] public bool IsLoading { get; set; }    
 }
