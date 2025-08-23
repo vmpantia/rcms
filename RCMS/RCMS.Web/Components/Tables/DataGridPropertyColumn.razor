@@ -1,0 +1,16 @@
+@using System.Linq.Expressions
+@typeparam TData 
+
+<PropertyColumn T="TData"
+                TProperty="string"
+                Title="@Title"
+                Property="@Property"
+                Sortable="true"
+                SortBy="@_sortBy"/>
+
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public Expression<Func<TData, string>> Property { get; set; }
+    
+    private Func<TData, object> _sortBy => Property.Compile();
+}

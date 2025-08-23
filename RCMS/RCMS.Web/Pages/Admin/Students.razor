@@ -5,7 +5,7 @@
 @using RCMS.Web.Services.Contracts
 @using RCMS.Web.Components.Chips
 @using RCMS.Web.Components.Texts
-@using RCMS.Web.Models
+@using RCMS.Web.Components.Tables
 
 @attribute [Authorize(Roles = nameof(UserRole.Admin))]
 
@@ -13,9 +13,22 @@
     <ChildComponent>
         <MudGrid>
             <MudItem xs="12">
-                <DataGrid Items="_students" 
-                          Columns="_columns" 
-                          IsLoading="_isLoading" />
+                <DataGrid Items="_students"
+                          IsLoading="_isLoading">
+                    <Columns>
+                        <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.Name" />
+                        <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.PhoneNumber" />
+                        <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.EmailAddress" />
+                        <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.NoOfOngoingEnrollments.ToString()" />
+                        <DataGridTemplateColumn TData="StudentLiteDto" Title="Status" IsSortable="true" SortBy="s => s.Status">
+                            <StudentStatusChip Status="@context.Status"/>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn TData="StudentLiteDto" Title="Status" IsSortable="true" SortBy="s => s.LastModifiedAt">
+                            <DateTimeText Value="@context.LastModifiedAt" 
+                                          SecondaryText="@context.LastModifiedBy" />
+                        </DataGridTemplateColumn>
+                    </Columns>
+                </DataGrid>
             </MudItem>
         </MudGrid>
     </ChildComponent>
@@ -26,15 +39,6 @@
     [Inject] public IStudentService StudentService { get; set; }
 
     private IEnumerable<StudentLiteDto> _students = new List<StudentLiteDto>();
-    private readonly IEnumerable<DataGridColumn<StudentLiteDto>> _columns = new List<DataGridColumn<StudentLiteDto>>
-    {
-        DataGridColumn<StudentLiteDto>.CreatePropertyColumn("Name", s => s.Name),
-        DataGridColumn<StudentLiteDto>.CreatePropertyColumn("Phone Number", s => s.PhoneNumber),
-        DataGridColumn<StudentLiteDto>.CreatePropertyColumn("Email", s => s.EmailAddress),
-        DataGridColumn<StudentLiteDto>.CreatePropertyColumn("No. of Ongoing Enrollments", s => s.NoOfOngoingEnrollments.ToString()),
-        DataGridColumn<StudentLiteDto>.CreateTemplateColumn("Status", s => @<StudentStatusChip Status="@s.Status" />, s => s.Status),
-        DataGridColumn<StudentLiteDto>.CreateTemplateColumn("Last Modified", s => @<DateTimeText Value="@s.LastModifiedAt" SecondaryText="@s.LastModifiedBy" />, s => s.LastModifiedAt)
-    };
     private bool _isLoading = true;
 
     protected override async Task OnInitializedAsync()

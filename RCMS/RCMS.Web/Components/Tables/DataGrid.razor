@@ -1,33 +1,10 @@
-@using RCMS.Web.Models
 @typeparam TData 
 
 <MudDataGrid Items="Items" 
              Loading="IsLoading" 
              Dense="true">
     <Columns>
-        @foreach (var col in Columns)
-        {
-            if (!col.IsTemplate && col.Property is not null)
-            {
-                <PropertyColumn T="TData"
-                                TProperty="string"
-                                Property="@col.Property"
-                                Title="@col.Title"
-                                Sortable="@col.Sortable"
-                                SortBy="@col.SortBy"/>
-            }
-            else if (col.IsTemplate && col.TemplateContent is not null && col.SortBy is not null)
-            {
-                <TemplateColumn T="TData"
-                                Title="@col.Title"
-                                Sortable="@col.Sortable"
-                                SortBy="@col.SortBy">
-                    <CellTemplate>
-                        @col.TemplateContent(context.Item)
-                    </CellTemplate>
-                </TemplateColumn>
-            }
-        }
+        @Columns
     </Columns>
     <PagerContent>
         <MudDataGridPager T="TData" />
@@ -43,6 +20,6 @@
 @code {
     
     [Parameter] public IEnumerable<TData> Items { get; set; }
-    [Parameter] public IEnumerable<DataGridColumn<TData>> Columns { get; set; }
+    [Parameter] public RenderFragment Columns { get; set; }
     [Parameter] public bool IsLoading { get; set; }    
 }
