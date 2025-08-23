@@ -5,6 +5,7 @@
 @using RCMS.Web.Services.Contracts
 @using RCMS.Web.Components.Chips
 @using RCMS.Web.Components.Texts
+@using RCMS.Web.Models
 
 @attribute [Authorize(Roles = nameof(UserRole.Admin))]
 
@@ -12,34 +13,9 @@
     <ChildComponent>
         <MudGrid>
             <MudItem xs="12">
-                <MudDataGrid Items="_students" Loading="_isLoading" Dense="true">
-                    <Columns>
-                        <PropertyColumn Property="sld => sld.Name" Title="Name" />
-                        <PropertyColumn Property="sld => sld.PhoneNumber" Title="Phone Number" />
-                        <PropertyColumn Property="sld => sld.EmailAddress" Title="Email" />
-                        <PropertyColumn Property="sld => sld.NoOfOngoingEnrollments" Title="No. of Ongoing Enrollments" />
-                        <TemplateColumn Title="Status" Sortable="true" SortBy="sld => sld.Status">
-                            <CellTemplate>
-                                <StudentStatusChip Status="@context.Item.Status" />
-                            </CellTemplate>
-                        </TemplateColumn>
-                        <TemplateColumn Title="Last Modified" Sortable="true"  SortBy="sld => sld.LastModifiedAt">
-                            <CellTemplate>
-                                <DateTimeText Value="@context.Item.LastModifiedAt"
-                                              SecondaryText="@context.Item.LastModifiedBy" />
-                            </CellTemplate>
-                        </TemplateColumn>
-                    </Columns>
-                    <PagerContent>
-                        <MudDataGridPager T="StudentLiteDto" />
-                    </PagerContent>
-                    <NoRecordsContent>
-                        <MudText>No record found at this moment.</MudText>
-                    </NoRecordsContent>
-                    <LoadingContent>
-                        <MudText>Loading...</MudText>
-                    </LoadingContent>
-                </MudDataGrid>
+                <DataGrid Items="_students" 
+                          Columns="_columns" 
+                          IsLoading="_isLoading" />
             </MudItem>
         </MudGrid>
     </ChildComponent>
@@ -50,12 +26,21 @@
     [Inject] public IStudentService StudentService { get; set; }
 
     private IEnumerable<StudentLiteDto> _students = new List<StudentLiteDto>();
+    private readonly IEnumerable<DataGridColumn<StudentLiteDto>> _columns = new List<DataGridColumn<StudentLiteDto>>
+    {
+        DataGridColumn<StudentLiteDto>.CreatePropertyColumn("Name", s => s.Name),
+        DataGridColumn<StudentLiteDto>.CreatePropertyColumn("Phone Number", s => s.PhoneNumber),
+        DataGridColumn<StudentLiteDto>.CreatePropertyColumn("Email", s => s.EmailAddress),
+        DataGridColumn<StudentLiteDto>.CreatePropertyColumn("No. of Ongoing Enrollments", s => s.NoOfOngoingEnrollments.ToString()),
+        DataGridColumn<StudentLiteDto>.CreateTemplateColumn("Status", s => @<StudentStatusChip Status="@s.Status" />, s => s.Status),
+        DataGridColumn<StudentLiteDto>.CreateTemplateColumn("Last Modified", s => @<DateTimeText Value="@s.LastModifiedAt" SecondaryText="@s.LastModifiedBy" />, s => s.LastModifiedAt)
+    };
     private bool _isLoading = true;
 
     protected override async Task OnInitializedAsync()
     {
         _isLoading = true;
-
+        
         _students = await StudentService.GetStudentsAsync();
         
         _isLoading = false;
