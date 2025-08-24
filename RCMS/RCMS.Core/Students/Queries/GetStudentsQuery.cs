@@ -16,6 +16,7 @@ public sealed class GetStudentsQueryHandler(IStudentRepository studentRepository
         // Get students stored on the database
         var students = await studentRepository.Get()
             .Include(tbl => tbl.Enrollments)
+            .OrderByDescending(tbl => tbl.CreatedAt)
             .AsNoTracking()
             .AsSplitQuery()
             .ToListAsync(cancellationToken);
