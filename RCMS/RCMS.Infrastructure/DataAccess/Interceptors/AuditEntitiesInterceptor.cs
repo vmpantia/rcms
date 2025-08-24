@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using RCMS.Infrastructure.DataAccess.Entities.Contracts;
+using RCMS.Domain.Entities;
 
 namespace RCMS.Infrastructure.DataAccess.Interceptors;
 

@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RCMS.Core.Students.Commands;
-using RCMS.Core.Students.Queries;
+using RCMS.Application.Students.Commands;
+using RCMS.Application.Students.Queries;
 using RCMS.Shared.Enumerations;
 using RCMS.Shared.Models.Students;
 

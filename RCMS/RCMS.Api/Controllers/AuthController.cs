@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using RCMS.Core.Users.Commands;
+using RCMS.Application.Users.Commands;
 using RCMS.Shared.Models.Users;
 
 namespace RCMS.Api.Controllers;

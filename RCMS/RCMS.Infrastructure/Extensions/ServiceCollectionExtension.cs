@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RCMS.Domain.Interfaces.Repositories;
 using RCMS.Infrastructure.DataAccess.Contexts;
 using RCMS.Infrastructure.DataAccess.Interceptors;
 using RCMS.Infrastructure.DataAccess.Repositories;
-using RCMS.Infrastructure.DataAccess.Repositories.Contracts;
 
 namespace RCMS.Infrastructure.Extensions;
 

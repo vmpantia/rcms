@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using RCMS.Infrastructure.DataAccess.Entities;
+using RCMS.Domain.Entities;
 using RCMS.Infrastructure.Extensions;
 
 namespace RCMS.Infrastructure.DataAccess.Contexts;

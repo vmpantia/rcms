@@ -1,6 +1,6 @@
 using Bogus;
+using RCMS.Domain.Entities;
 using RCMS.Infrastructure.DataAccess.Contexts;
-using RCMS.Infrastructure.DataAccess.Entities;
 using RCMS.Shared.Enumerations;
 
 namespace RCMS.Infrastructure.DataAccess.Seeds;

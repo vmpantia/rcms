@@ -1,7 +1,5 @@
 using RCMS.Api.Extensions;
-using RCMS.Core.Extensions;
-using RCMS.Infrastructure.DataAccess.Contexts;
-using RCMS.Infrastructure.DataAccess.Seeds;
+using RCMS.Application;
 using RCMS.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);

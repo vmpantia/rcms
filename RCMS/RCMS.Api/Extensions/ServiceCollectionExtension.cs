@@ -2,9 +2,9 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using RCMS.Application.Authentication;
 using RCMS.Infrastructure.DataAccess.Contexts;
 using RCMS.Infrastructure.DataAccess.Seeds;
-using RCMS.Shared.Settings;
 
 namespace RCMS.Api.Extensions;
 
