@@ -1,0 +1,10 @@
+
+<MudTooltip Text="@Text">
+    <MudIconButton Icon="@Icon" OnClick="OnButtonClick" />
+</MudTooltip>
+
+@code {
+    [Parameter] public string Icon { get; set; }
+    [Parameter] public string Text { get; set; }
+    [Parameter] public EventCallback OnButtonClick { get; set; }
+}

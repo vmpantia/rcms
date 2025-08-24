@@ -15,23 +15,26 @@
     <ChildComponent>
         <MudGrid>
             <MudItem xs="12">
-                <Button Text="Create Student" 
-                        OnButtonClick="OpenCreateStudentFormDialog" />
-            </MudItem>
-            <MudItem xs="12">
                 <DataGrid Items="_students"
                           IsLoading="_isLoading">
-                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.Name"/>
-                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Phone Number" Property="s => s.PhoneNumber"/>
-                    <DataGridPropertyColumn TData="StudentLiteDto" Title="Email Address" Property="s => s.EmailAddress"/>
-                    <DataGridPropertyColumn TData="StudentLiteDto" Title="No of Ongoing Enrollments" Property="s => s.NoOfOngoingEnrollments.ToString()"/>
-                    <DataGridTemplateColumn TData="StudentLiteDto" Title="Status" IsSortable="true" SortBy="s => s.Status">
-                        <StudentStatusChip Status="@context.Status"/>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn TData="StudentLiteDto" Title="Status" IsSortable="true" SortBy="s => s.LastModifiedAt">
-                        <DateTimeText Value="@context.LastModifiedAt"
-                                      SecondaryText="@context.LastModifiedBy"/>
-                    </DataGridTemplateColumn>
+                    <Toolbar>
+                        <IconButton Icon="@Icons.Material.Filled.PersonAdd"
+                                    Text="Create Student" 
+                                    OnButtonClick="OpenCreateStudentFormDialog" />
+                    </Toolbar>
+                    <Columns>
+                        <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.Name"/>
+                        <DataGridPropertyColumn TData="StudentLiteDto" Title="Phone Number" Property="s => s.PhoneNumber"/>
+                        <DataGridPropertyColumn TData="StudentLiteDto" Title="Email Address" Property="s => s.EmailAddress"/>
+                        <DataGridPropertyColumn TData="StudentLiteDto" Title="No of Ongoing Enrollments" Property="s => s.NoOfOngoingEnrollments.ToString()"/>
+                        <DataGridTemplateColumn TData="StudentLiteDto" Title="Status" IsSortable="true" SortBy="s => s.Status">
+                            <StudentStatusChip Status="@context.Status"/>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn TData="StudentLiteDto" Title="Last Modified" IsSortable="true" SortBy="s => s.LastModifiedAt">
+                            <DateTimeText Value="@context.LastModifiedAt"
+                                          SecondaryText="@context.LastModifiedBy"/>
+                        </DataGridTemplateColumn>
+                    </Columns>
                 </DataGrid>
             </MudItem>
         </MudGrid>

@@ -38,14 +38,14 @@
                                For="@(() => _student.LastName)"
                                IsDisabled="IsFieldsDisabled"/>
                 </MudItem>
-                <MudItem xs="6">
+                <MudItem xs="4">
                     <SelectField Label="Gender"
                                  @bind-Value="_student.Gender"
                                  For="@(() => _student.Gender)"
                                  IsDisabled="IsFieldsDisabled"
                                  Options="@(Enum.GetValues<GenderType>().Select(gt => gt.ToString()))"/>
                 </MudItem>
-                <MudItem xs="6">
+                <MudItem xs="4">
                     <DateTimeField Label="Birthdate"
                                    @bind-Date="_student.BirthDate"
                                    For="@(() => _student.BirthDate)"

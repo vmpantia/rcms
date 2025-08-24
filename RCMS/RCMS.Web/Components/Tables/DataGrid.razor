@@ -1,14 +1,17 @@
 @typeparam TData 
 
-<MudDataGrid Items="Items" 
-             Loading="IsLoading" 
+<MudDataGrid Items="Items"
+             Loading="IsLoading"
              Dense="true"
              Hover="true">
+    <ToolBarContent>
+        @Toolbar
+    </ToolBarContent>
     <Columns>
-        @ChildContent
+        @Columns
     </Columns>
     <PagerContent>
-        <MudDataGridPager T="TData" />
+        <MudDataGridPager T="TData"/>
     </PagerContent>
     <NoRecordsContent>
         <MudText>No record found at this moment.</MudText>
@@ -21,6 +24,7 @@
 @code {
     
     [Parameter] public IEnumerable<TData> Items { get; set; }
-    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment Columns { get; set; }
+    [Parameter] public RenderFragment Toolbar { get; set; }
     [Parameter] public bool IsLoading { get; set; }    
 }
