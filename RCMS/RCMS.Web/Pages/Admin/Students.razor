@@ -34,7 +34,7 @@
                             <DateTimeText Value="@context.LastModifiedAt"
                                           SecondaryText="@context.LastModifiedBy"/>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn TData="StudentLiteDto" Title="Last Modified" IsSortable="true" SortBy="s => s.LastModifiedAt">
+                        <DataGridTemplateColumn TData="StudentLiteDto" Title="Action" CssClass="d-flex justify-end">
                             <MudMenu Icon="@Icons.Material.Filled.MoreVert">
                                 <MudMenuItem Label="Edit" OnClick="() => OpenUpdateStudentDialog(context)" />
                             </MudMenu>
