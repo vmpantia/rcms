@@ -1,7 +1,6 @@
 namespace RCMS.Shared.Models.Users;
 
-public sealed class UserTokenDto(string token, DateTime? expires)
+public sealed class UserTokenDto(string token)
 {
     public string Token { get; init; } = token;
-    public DateTime? Expires { get; init; } = expires;
 }

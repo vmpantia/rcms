@@ -43,7 +43,7 @@ public sealed class TokenProvider(JwtSetting jwtSetting, ILogger<TokenProvider> 
             var handler = new JsonWebTokenHandler();
             var token = handler.CreateToken(tokenDescriptor);
 
-            return new UserTokenDto(token, expires);
+            return new UserTokenDto(token);
         }
         catch (Exception ex)
         {

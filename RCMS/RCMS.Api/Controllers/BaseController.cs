@@ -1,6 +1,7 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using RCMS.Api.Extensions;
 using RCMS.Shared.Enumerations;
 using RCMS.Shared.Extensions;
 using RCMS.Shared.Responses;

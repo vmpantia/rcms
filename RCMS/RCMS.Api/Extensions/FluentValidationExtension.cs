@@ -1,6 +1,6 @@
 using FluentValidation.Results;
 
-namespace RCMS.Shared.Extensions;
+namespace RCMS.Api.Extensions;
 
 public static class FluentValidationExtension
 {

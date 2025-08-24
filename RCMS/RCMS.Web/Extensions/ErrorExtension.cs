@@ -2,7 +2,7 @@ using Newtonsoft.Json.Linq;
 using RCMS.Shared.Enumerations;
 using RCMS.Shared.Responses.Errors;
 
-namespace RCMS.Shared.Extensions;
+namespace RCMS.Web.Extensions;
 
 public static class ErrorExtension
 {
