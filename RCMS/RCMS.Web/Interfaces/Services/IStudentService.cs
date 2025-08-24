@@ -8,4 +8,5 @@ public interface IStudentService
     Task<StudentDto> GetStudentByIdAsync(Guid id);
     Task CreateStudentAsync(CreateStudentDto request);
     Task UpdateStudentAsync(Guid id, UpdateStudentDto request);
+    Task DeleteStudentAsync(Guid id);
 }

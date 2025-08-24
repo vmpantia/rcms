@@ -11,7 +11,7 @@
                      IsLoading="_isLoading"
                      IsSubmitting="_isUpdating"
                      IsDisabled="_isInvalidData"
-                     OnSubmitButtonClick="HandleUpdateStudentAsync"/>
+                     OnSubmitButtonClick="UpdateStudentAsync"/>
     </DialogContent>
 </MudDialog>
 
@@ -63,7 +63,7 @@
         }
     }
 
-    private async Task HandleUpdateStudentAsync()
+    private async Task UpdateStudentAsync()
     {
         try
         {

@@ -13,14 +13,17 @@ namespace RCMS.Web.Providers;
 public class HttpClientProvider(HttpClient httpClient, ILocalStorageService localStorageService,
     NavigationManager navigationManager, ILogger<HttpClientProvider> logger) : IHttpClientProvider
 {
-    public async Task<TData> GetAsync<TData>(string uri) =>
-        await SendRequestAsync<TData>(HttpMethod.Get, uri);
+    public async Task<TData> GetAsync<TData>(string uri, object? data = null) =>
+        await SendRequestAsync<TData>(HttpMethod.Get, uri, data);
 
-    public async Task<TData> PostAsync<TData>(string uri, object data) =>
+    public async Task<TData> PostAsync<TData>(string uri, object? data = null) =>
         await SendRequestAsync<TData>(HttpMethod.Post, uri, data);
 
-    public async Task<TData> PutAsync<TData>(string uri, object data) =>
+    public async Task<TData> PutAsync<TData>(string uri, object? data = null) =>
         await SendRequestAsync<TData>(HttpMethod.Put, uri, data);
+
+    public async Task<TData> DeleteAsync<TData>(string uri, object? data = null) =>
+        await SendRequestAsync<TData>(HttpMethod.Delete, uri, data);
 
     private async Task SetAuthorizeHeaderAsync()
     {

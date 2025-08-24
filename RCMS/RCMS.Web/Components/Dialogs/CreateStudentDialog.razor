@@ -1,6 +1,5 @@
 @using RCMS.Shared.Models.Students
 @using RCMS.Web.Components.Forms
-@using RCMS.Web.Extensions
 @using RCMS.Web.Interfaces.Helpers
 @using RCMS.Web.Interfaces.Services
 
@@ -10,7 +9,7 @@
                      Student="@_student" 
                      ErrorMessage="@_errorMessage"
                      IsSubmitting="_isCreating"
-                     OnSubmitButtonClick="HandleCreateStudentAsync"/>
+                     OnSubmitButtonClick="CreateStudentAsync"/>
     </DialogContent>
 </MudDialog>
 
@@ -25,7 +24,7 @@
     private bool _isCreating;
     private string _errorMessage = string.Empty;
 
-    private async Task HandleCreateStudentAsync()
+    private async Task CreateStudentAsync()
     {
         try
         {

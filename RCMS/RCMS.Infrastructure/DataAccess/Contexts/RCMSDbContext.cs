@@ -17,11 +17,11 @@ public class RCMSDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyBaseEntityFilters();
-
         modelBuilder.Entity<Course>(builder =>
         {
             builder.HasKey(c => c.Id);
+            
+            builder.HasQueryFilter(e => e.DeletedAt == null && string.IsNullOrEmpty(e.DeletedBy));
         });
 
         modelBuilder.Entity<Enrollment>(builder =>
@@ -37,6 +37,8 @@ public class RCMSDbContext : DbContext
                 .WithMany(c => c.Enrollments)
                 .HasForeignKey(e => e.CourseId)
                 .IsRequired();
+            
+            builder.HasQueryFilter(e => e.DeletedAt == null && string.IsNullOrEmpty(e.DeletedBy));
         });
         
         modelBuilder.Entity<Instructor>(builder =>
@@ -52,16 +54,22 @@ public class RCMSDbContext : DbContext
                 .WithMany(c => c.Schedules)
                 .HasForeignKey(s => s.CourseId)
                 .IsRequired();
+            
+            builder.HasQueryFilter(e => e.DeletedAt == null && string.IsNullOrEmpty(e.DeletedBy));
         });
         
         modelBuilder.Entity<Student>(builder =>
         {
             builder.HasKey(s => s.Id);
+            
+            builder.HasQueryFilter(e => e.DeletedAt == null && string.IsNullOrEmpty(e.DeletedBy));
         });
 
         modelBuilder.Entity<User>(builder =>
         {
             builder.HasKey(u => u.Id);
+            
+            builder.HasQueryFilter(e => e.DeletedAt == null && string.IsNullOrEmpty(e.DeletedBy));
         });
     }
 }

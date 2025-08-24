@@ -9,7 +9,7 @@ using RCMS.Shared.Validators;
 
 namespace RCMS.Application.Students.Commands;
 
-public sealed record UpdateStudentCommand(Guid StudentId, UpdateStudentDto Student) : IRequest<Result<Guid>>;
+public sealed record UpdateStudentCommand(Guid Id, UpdateStudentDto Student) : IRequest<Result<Guid>>;
 
 public sealed class UpdateStudentCommandValidator : AbstractValidator<UpdateStudentCommand>
 {
@@ -22,7 +22,7 @@ public sealed class UpdateStudentCommandValidator : AbstractValidator<UpdateStud
             .CustomAsync(async (usd, context, ct) =>
             {
                 // Get student stored on the database using a student id
-                var studentToUpdate = await studentRepository.GetOneAsync(s => s.Id == usd.StudentId, ct);
+                var studentToUpdate = await studentRepository.GetOneAsync(s => s.Id == usd.Id, ct);
                 
                 // Check if a student exists
                 if (studentToUpdate is null)
@@ -47,7 +47,7 @@ public sealed class UpdateStudentCommandValidator : AbstractValidator<UpdateStud
             {
                 // Check if the student already exists on the database by checking first name and last name with different id
                 var result = await studentRepository.IsExistAsync(
-                    expression: s => s.Id != usd.StudentId && 
+                    expression: s => s.Id != usd.Id && 
                                      s.FirstName == usd.Student.FirstName && 
                                      s.LastName == usd.Student.LastName,
                     cancellationToken: ct);
@@ -62,10 +62,10 @@ public sealed class UpdateStudentCommandHandler(IStudentRepository studentReposi
     public async Task<Result<Guid>> Handle(UpdateStudentCommand request, CancellationToken cancellationToken)
     {
         // Get student stored on the database using a student id
-        var studentToUpdate = await studentRepository.GetOneAsync(s => s.Id == request.StudentId, cancellationToken);
+        var studentToUpdate = await studentRepository.GetOneAsync(s => s.Id == request.Id, cancellationToken);
         
         // Check if a student is NULL or not exist
-        if (studentToUpdate is null) return StudentError.NotFound(request.StudentId);
+        if (studentToUpdate is null) return StudentError.NotFound(request.Id);
         
         // Map student to entity
         var updatedEntity = mapper.Map(request.Student, studentToUpdate);

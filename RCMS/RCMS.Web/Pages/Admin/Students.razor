@@ -39,6 +39,7 @@
                         <DataGridTemplateColumn TData="StudentLiteDto" Title="Action" CssClass="d-flex justify-end">
                             <MudMenu Icon="@Icons.Material.Filled.MoreVert">
                                 <MudMenuItem Label="Edit" OnClick="() => OpenUpdateStudentDialog(context)" />
+                                <MudMenuItem Label="Delete" OnClick="() => DeleteStudentAsync(context)" />
                             </MudMenu>
                         </DataGridTemplateColumn>
                     </Columns>
@@ -94,8 +95,30 @@
         var result = await DialogHelper.ShowDialogAsync<TDialog>(title, parameters, options);
         if (result)
         {
-            await OnInitializedAsync();
             StateHasChanged();
+            await OnInitializedAsync();
         }
-    } 
+    }
+
+    private async Task DeleteStudentAsync(StudentLiteDto dto)
+    {
+        try
+        {
+            var isConfirmed = await DialogHelper.ShowMessageDialogAsync("Confirm Deletion", "Are you sure you want to delete this student?");
+            if (isConfirmed)
+            {
+                StateHasChanged();
+            
+                await StudentService.DeleteStudentAsync(dto.Id);
+                await OnInitializedAsync();
+            
+                // Alert user for success request and close dialog
+                Snackbar.Add("Student deleted successfully.", Severity.Success);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
 }
