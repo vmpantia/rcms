@@ -1,4 +1,3 @@
-using MudBlazor;
 using RCMS.Shared.Models.Students;
 using RCMS.Web.Providers.Contracts;
 using RCMS.Web.Services.Contracts;
@@ -11,13 +10,28 @@ public class StudentService(IHttpClientProvider httpClientProvider, ILogger<Auth
     {
         try
         {
-            // Send getting of student request to API
+            // Send getting of students request to API
             var students = await httpClientProvider.GetAsync<IEnumerable<StudentLiteDto>>("https://localhost:7226/api/Students");
             return students;
         }
         catch (Exception ex)
         {
             logger.LogError($"Error in getting students. | {ex.Message}");
+            throw;
+        }
+    }
+    
+    public async Task<StudentDto> GetStudentByIdAsync(Guid id)
+    {
+        try
+        {
+            // Send getting of student request to API
+            var student = await httpClientProvider.GetAsync<StudentDto>($"https://localhost:7226/api/Students/{id}");
+            return student;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError($"Error in getting student. | {ex.Message}");
             throw;
         }
     }
@@ -32,6 +46,20 @@ public class StudentService(IHttpClientProvider httpClientProvider, ILogger<Auth
         catch (Exception ex)
         {
             logger.LogError($"Error in creating student. | {ex.Message}");
+            throw;
+        }
+    }
+    
+    public async Task UpdateStudentAsync(Guid id, UpdateStudentDto request)
+    {
+        try
+        {
+            // Send updating of student request to API
+            await httpClientProvider.PutAsync<Guid>($"https://localhost:7226/api/Students/{id}", request);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError($"Error in updating student. | {ex.Message}");
             throw;
         }
     }

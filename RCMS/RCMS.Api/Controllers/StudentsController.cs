@@ -20,4 +20,7 @@ public class StudentsController(IMediator mediator) : BaseController(mediator)
     
     [HttpPost, Authorize(Roles = nameof(UserRole.Admin))]
     public async Task<IActionResult> CreateStudentAsync([FromBody] CreateStudentDto request) => await SendRequestAsync(new CreateStudentCommand(request));
+    
+    [HttpPut("{id}"), Authorize(Roles = nameof(UserRole.Admin))]
+    public async Task<IActionResult> UpdateStudentAsync(Guid id, [FromBody] UpdateStudentDto request) => await SendRequestAsync(new UpdateStudentCommand(id, request));
 }

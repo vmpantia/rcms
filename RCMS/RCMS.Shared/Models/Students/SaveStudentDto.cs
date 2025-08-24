@@ -1,6 +1,6 @@
 namespace RCMS.Shared.Models.Students;
 
-public class CreateStudentDto
+public class SaveStudentDto
 {
     public string FirstName { get; set; }
     public string? MiddleName { get; set; }
@@ -10,3 +10,6 @@ public class CreateStudentDto
     public string PhoneNumber { get; set; }
     public string EmailAddress { get; set; }
 }
+
+public class CreateStudentDto : SaveStudentDto;
+public class UpdateStudentDto : CreateStudentDto;

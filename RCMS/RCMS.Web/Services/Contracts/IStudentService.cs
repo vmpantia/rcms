@@ -5,5 +5,7 @@ namespace RCMS.Web.Services.Contracts;
 public interface IStudentService
 {
     Task<IEnumerable<StudentLiteDto>> GetStudentsAsync();
+    Task<StudentDto> GetStudentByIdAsync(Guid id);
     Task CreateStudentAsync(CreateStudentDto request);
+    Task UpdateStudentAsync(Guid id, UpdateStudentDto request);
 }

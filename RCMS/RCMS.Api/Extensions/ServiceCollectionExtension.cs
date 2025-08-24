@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RCMS.Application.Authentication;
+using RCMS.Infrastructure.DataAccess;
 using RCMS.Infrastructure.DataAccess.Contexts;
-using RCMS.Infrastructure.DataAccess.Seeds;
 
 namespace RCMS.Api.Extensions;
 
@@ -14,7 +14,7 @@ public static class ServiceCollectionExtension
     {
         using var scope = webApplication.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<RCMSDbContext>();
-        await DummyDataHelper.GenerateAsync(db);
+        await DataSeeder.GenerateAsync(db);
     }
     
     public static void AddSwaggerGenWithAuth(this IServiceCollection services)

@@ -1,0 +1,86 @@
+@using RCMS.Shared.Models.Students
+@using RCMS.Web.Components.Forms
+@using RCMS.Web.Services.Contracts
+
+<MudDialog>
+    <DialogContent>
+        <StudentForm TStudent="UpdateStudentDto"
+                     Student="@_student" 
+                     ErrorMessage="@_errorMessage"
+                     IsLoading="_isLoading"
+                     IsSubmitting="_isUpdating"
+                     IsDisabled="_isInvalidData"
+                     OnSubmitButtonClick="HandleUpdateStudentAsync"/>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    
+    [Inject] public IStudentService StudentService { get; set; }
+    [Inject] public ISnackbar Snackbar { get; set; }
+
+    [CascadingParameter] public IMudDialogInstance MudDialog { get; set; }
+    [Parameter] public Guid StudentId { get; set; }
+    
+    private UpdateStudentDto _student = new();
+    private bool _isUpdating;
+    private bool _isLoading;
+    private bool _isInvalidData;
+    private string _errorMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _isLoading = true;
+            _isInvalidData = false;
+            
+            // Get student to update
+            var student = await StudentService.GetStudentByIdAsync(StudentId);
+
+            // Map student to a student update model
+            _student = new UpdateStudentDto
+            {
+                FirstName = student.FirstName,
+                MiddleName = student.MiddleName,
+                LastName = student.LastName,
+                Gender = student.Gender.ToString(),
+                BirthDate = student.BirthDate,
+                PhoneNumber = student.PhoneNumber,
+                EmailAddress = student.EmailAddress,
+            };
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+            _isInvalidData = true;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task HandleUpdateStudentAsync()
+    {
+        try
+        {
+            _errorMessage = string.Empty;
+            _isUpdating = true;
+            
+            await StudentService.UpdateStudentAsync(StudentId, _student);
+            
+            // Alert user for success request and close dialog
+            Snackbar.Add("Student updated successfully.", Severity.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+        }
+        finally
+        {
+            _isUpdating = false;
+        }
+    }
+}

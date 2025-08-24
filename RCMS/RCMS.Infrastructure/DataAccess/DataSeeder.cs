@@ -3,9 +3,9 @@ using RCMS.Domain.Entities;
 using RCMS.Infrastructure.DataAccess.Contexts;
 using RCMS.Shared.Enumerations;
 
-namespace RCMS.Infrastructure.DataAccess.Seeds;
+namespace RCMS.Infrastructure.DataAccess;
 
-public abstract class DummyDataHelper
+public abstract class DataSeeder
 {
     public static async Task GenerateAsync(RCMSDbContext context)
     {

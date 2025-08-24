@@ -1,0 +1,124 @@
+@using RCMS.Shared.Enumerations
+@using RCMS.Shared.Models.Students
+@using RCMS.Web.Components.Validations
+@using RCMS.Web.Components.Controls
+
+@typeparam TStudent where TStudent : SaveStudentDto
+
+<EditForm Model="Student" OnValidSubmit="OnSubmitButtonClick">
+    <FluentValidationValidator T="TStudent" />
+    <MudGrid Class="mb-5">
+        @if (IsLoading)
+        {
+            <MudItem xs="12">
+                <MudSkeleton Height="30px" />
+            </MudItem>
+            <MudItem xs="4">
+                <MudSkeleton Height="30px" />
+            </MudItem>
+            <MudItem xs="4">
+                <MudSkeleton Height="30px" />
+            </MudItem>
+            <MudItem xs="4">
+                <MudSkeleton Height="30px" />
+            </MudItem>
+            <MudItem xs="4">
+                <MudSkeleton Height="30px" />
+            </MudItem>
+            <MudItem xs="4">
+                <MudSkeleton Height="30px" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudSkeleton Height="30px" />
+            </MudItem>
+            <MudItem xs="6">
+                <MudSkeleton Height="30px" />
+            </MudItem>
+            <MudItem xs="6">
+                <MudSkeleton Height="30px" />
+            </MudItem>
+            <MudItem Class="mt-2" xs="12">
+                <MudSkeleton Height="30px" />
+            </MudItem>
+        }
+        else
+        {
+            @if (HasError)
+            {
+                <MudItem xs="12">
+                    <MudAlert Severity="Severity.Error">
+                        @((MarkupString)ErrorMessage)
+                    </MudAlert>
+                </MudItem>
+            }
+            <MudItem xs="12">
+                <MudText Typo="Typo.button">Personal Information</MudText>
+            </MudItem>
+            <MudItem xs="4">
+                <TextField Label="First Name"
+                           @bind-Value="Student.FirstName"
+                           For="@(() => Student.FirstName)"
+                           IsDisabled="IsFormDisabled"/>
+            </MudItem>
+            <MudItem xs="4">
+                <TextField Label="Middle Name"
+                           @bind-Value="Student.MiddleName"
+                           For="@(() => Student.MiddleName)"
+                           IsDisabled="IsFormDisabled"/>
+            </MudItem>
+            <MudItem xs="4">
+                <TextField Label="Last Name"
+                           @bind-Value="Student.LastName"
+                           For="@(() => Student.LastName)"
+                           IsDisabled="IsFormDisabled"/>
+            </MudItem>
+            <MudItem xs="4">
+                <SelectField Label="Gender"
+                             @bind-Value="Student.Gender"
+                             For="@(() => Student.Gender)"
+                             IsDisabled="IsFormDisabled"
+                             Options="@(Enum.GetValues<GenderType>().Select(gt => gt.ToString()))"/>
+            </MudItem>
+            <MudItem xs="4">
+                <DateTimeField Label="Birthdate"
+                               @bind-Date="Student.BirthDate"
+                               For="@(() => Student.BirthDate)"
+                               IsDisabled="IsFormDisabled"/>
+            </MudItem>
+            <MudItem xs="12">
+                <MudText Typo="Typo.button">Contact Information</MudText>
+            </MudItem>
+            <MudItem xs="6">
+                <TextField Label="Phone Number"
+                           @bind-Value="Student.PhoneNumber"
+                           For="@(() => Student.PhoneNumber)"
+                           IsDisabled="IsFormDisabled"/>
+            </MudItem>
+            <MudItem xs="6">
+                <TextField Label="Email Address"
+                           @bind-Value="Student.EmailAddress"
+                           For="@(() => Student.EmailAddress)"
+                           IsDisabled="IsFormDisabled"/>
+            </MudItem>
+            <MudItem Class="mt-2" xs="12">
+                <Button Type="ButtonType.Submit" 
+                        IsDisabled="IsFormDisabled" 
+                        IsLoading="IsSubmitting" 
+                        Text="Submit"
+                        LoadingText="Submitting"></Button>
+            </MudItem>
+        }
+    </MudGrid>
+</EditForm>
+
+@code {
+    [Parameter] public TStudent Student { get; set; }
+    [Parameter] public string ErrorMessage { get; set; }
+    [Parameter] public bool IsLoading { get; set; }
+    [Parameter] public bool IsSubmitting { get; set; }
+    [Parameter] public bool IsDisabled { get; set; }
+    [Parameter] public EventCallback<EditContext> OnSubmitButtonClick { get; set; }
+    
+    private bool HasError => !string.IsNullOrEmpty(ErrorMessage);
+    private bool IsFormDisabled => IsSubmitting || IsDisabled;
+}

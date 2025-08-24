@@ -1,0 +1,47 @@
+@using RCMS.Shared.Models.Students
+@using RCMS.Web.Services.Contracts
+@using RCMS.Web.Components.Forms
+
+<MudDialog>
+    <DialogContent>
+        <StudentForm TStudent="CreateStudentDto"
+                     Student="@_student" 
+                     ErrorMessage="@_errorMessage"
+                     IsSubmitting="_isCreating"
+                     OnSubmitButtonClick="HandleCreateStudentAsync"/>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [Inject] public IStudentService StudentService { get; set; }
+    [Inject] public ISnackbar Snackbar { get; set; }
+
+    [CascadingParameter] public IMudDialogInstance MudDialog { get; set; }
+    
+    private CreateStudentDto _student = new();
+    private bool _isCreating;
+    private string _errorMessage = string.Empty;
+
+    private async Task HandleCreateStudentAsync()
+    {
+        try
+        {
+            _errorMessage = string.Empty;
+            _isCreating = true;
+            
+            await StudentService.CreateStudentAsync(_student);
+            
+            // Alert user for success request and close dialog
+            Snackbar.Add("Student created successfully.", Severity.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+        }
+        finally
+        {
+            _isCreating = false;
+        }
+    }
+}

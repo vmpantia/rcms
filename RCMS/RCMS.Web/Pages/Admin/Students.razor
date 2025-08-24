@@ -20,7 +20,7 @@
                     <Toolbar>
                         <IconButton Icon="@Icons.Material.Filled.PersonAdd"
                                     Text="Create Student" 
-                                    OnButtonClick="OpenCreateStudentFormDialog" />
+                                    OnButtonClick="OpenCreateStudentDialog" />
                     </Toolbar>
                     <Columns>
                         <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.Name"/>
@@ -33,6 +33,11 @@
                         <DataGridTemplateColumn TData="StudentLiteDto" Title="Last Modified" IsSortable="true" SortBy="s => s.LastModifiedAt">
                             <DateTimeText Value="@context.LastModifiedAt"
                                           SecondaryText="@context.LastModifiedBy"/>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn TData="StudentLiteDto" Title="Last Modified" IsSortable="true" SortBy="s => s.LastModifiedAt">
+                            <MudMenu Icon="@Icons.Material.Filled.MoreVert">
+                                <MudMenuItem Label="Edit" OnClick="() => OpenUpdateStudentDialog(context)" />
+                            </MudMenu>
                         </DataGridTemplateColumn>
                     </Columns>
                 </DataGrid>
@@ -68,10 +73,22 @@
         }
     }
 
-    private async Task OpenCreateStudentFormDialog()
+    private async Task OpenCreateStudentDialog()
     {
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium };
-        var dialogReference = await DialogService.ShowAsync<CreateStudentFormDialog>("Create Student", options);
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        await OpenCreateOrUpdateStudentDialog<CreateStudentDialog>("Create Student", new DialogParameters(), options);
+    } 
+
+    private async Task OpenUpdateStudentDialog(StudentLiteDto dto)
+    {
+        var parameters = new DialogParameters<UpdateStudentDialog> { { usd => usd.StudentId, dto.Id } };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        await OpenCreateOrUpdateStudentDialog<UpdateStudentDialog>("Update Student", parameters, options);
+    } 
+ 
+    private async Task OpenCreateOrUpdateStudentDialog<TDialog>(string title, DialogParameters parameters, DialogOptions options) where TDialog : IComponent
+    {
+        var dialogReference = await DialogService.ShowAsync<TDialog>(title, parameters, options);
         var dialogResult = await dialogReference.Result;
         
         // Handle a success dialog result
