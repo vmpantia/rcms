@@ -1,0 +1,35 @@
+<MudDialog>
+    <DialogContent>
+        <div class="my-3">
+            @if (Content is not null)
+            {
+                @Content
+            }
+            else
+            {
+                <MudText>@Message</MudText>
+            }
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Class="mr-2 mb-2" OnClick="Cancel">
+            Cancel
+        </MudButton>
+        <MudButton Class="mr-2 mb-2" Color="@ButtonColor"
+                   Variant="Variant.Filled"
+                   OnClick="Submit">
+            @ButtonText
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
+    [Parameter] public string Message { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Yes";
+    [Parameter] public Color ButtonColor { get; set; } = Color.Primary;
+    [Parameter] public RenderFragment? Content { get; set; }
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    private void Cancel() => MudDialog.Cancel();
+}

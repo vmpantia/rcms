@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using RCMS.Shared.Extensions;
 using RCMS.Shared.Responses;
 using RCMS.Web.Extensions;
-using RCMS.Web.Providers.Contracts;
+using RCMS.Web.Interfaces.Providers;
 
 namespace RCMS.Web.Providers;
 

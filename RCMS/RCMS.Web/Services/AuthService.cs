@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using RCMS.Shared.Models.Users;
+using RCMS.Web.Interfaces.Providers;
+using RCMS.Web.Interfaces.Services;
 using RCMS.Web.Providers;
-using RCMS.Web.Providers.Contracts;
-using RCMS.Web.Services.Contracts;
 
 namespace RCMS.Web.Services;
 

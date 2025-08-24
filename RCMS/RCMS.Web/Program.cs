@@ -14,6 +14,7 @@ builder.Services.AddValidators();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddHelpers();
 builder.Services.AddProviders();
 builder.Services.AddServices();
 builder.Services.AddMudServices();

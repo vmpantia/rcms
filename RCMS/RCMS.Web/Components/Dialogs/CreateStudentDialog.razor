@@ -1,6 +1,8 @@
 @using RCMS.Shared.Models.Students
-@using RCMS.Web.Services.Contracts
 @using RCMS.Web.Components.Forms
+@using RCMS.Web.Extensions
+@using RCMS.Web.Interfaces.Helpers
+@using RCMS.Web.Interfaces.Services
 
 <MudDialog>
     <DialogContent>
@@ -14,6 +16,7 @@
 
 @code {
     [Inject] public IStudentService StudentService { get; set; }
+    [Inject] public IDialogHelper DialogHelper { get; set; }
     [Inject] public ISnackbar Snackbar { get; set; }
 
     [CascadingParameter] public IMudDialogInstance MudDialog { get; set; }
@@ -26,14 +29,19 @@
     {
         try
         {
-            _errorMessage = string.Empty;
-            _isCreating = true;
+            var isConfirmed = await DialogHelper.ShowMessageDialogAsync("Confirm Creation", "Are you sure you want to create this student?");
+            if (isConfirmed)
+            {
+                StateHasChanged();
+                _errorMessage = string.Empty;
+                _isCreating = true;
             
-            await StudentService.CreateStudentAsync(_student);
+                await StudentService.CreateStudentAsync(_student);
             
-            // Alert user for success request and close dialog
-            Snackbar.Add("Student created successfully.", Severity.Success);
-            MudDialog.Close(DialogResult.Ok(true));
+                // Alert user for success request and close dialog
+                Snackbar.Add("Student created successfully.", Severity.Success);
+                MudDialog.Close(DialogResult.Ok(true));
+            }
         }
         catch (Exception ex)
         {

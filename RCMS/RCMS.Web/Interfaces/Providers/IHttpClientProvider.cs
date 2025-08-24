@@ -1,4 +1,4 @@
-namespace RCMS.Web.Providers.Contracts;
+namespace RCMS.Web.Interfaces.Providers;
 
 public interface IHttpClientProvider
 {

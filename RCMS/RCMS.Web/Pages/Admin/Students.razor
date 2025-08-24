@@ -2,12 +2,14 @@
 @using Microsoft.AspNetCore.Authorization
 @using RCMS.Shared.Enumerations
 @using RCMS.Shared.Models.Students
-@using RCMS.Web.Services.Contracts
 @using RCMS.Web.Components.Chips
 @using RCMS.Web.Components.Texts
 @using RCMS.Web.Components.Tables
 @using RCMS.Web.Components.Controls
 @using RCMS.Web.Components.Dialogs
+@using RCMS.Web.Extensions
+@using RCMS.Web.Interfaces.Helpers
+@using RCMS.Web.Interfaces.Services
 
 @attribute [Authorize(Roles = nameof(UserRole.Admin))]
 
@@ -50,7 +52,7 @@
     
     [Inject] public IStudentService StudentService { get; set; }
     [Inject] public ISnackbar Snackbar { get; set; }
-    [Inject] public IDialogService DialogService { get; set; }
+    [Inject] public IDialogHelper DialogHelper { get; set; }
 
     private IEnumerable<StudentLiteDto> _students = new List<StudentLiteDto>();
     private bool _isLoading = true;
@@ -88,11 +90,9 @@
  
     private async Task OpenCreateOrUpdateStudentDialog<TDialog>(string title, DialogParameters parameters, DialogOptions options) where TDialog : IComponent
     {
-        var dialogReference = await DialogService.ShowAsync<TDialog>(title, parameters, options);
-        var dialogResult = await dialogReference.Result;
-        
-        // Handle a success dialog result
-        if (dialogResult is { Canceled: false, Data: true })
+        // Handle dialog result
+        var result = await DialogHelper.ShowDialogAsync<TDialog>(title, parameters, options);
+        if (result)
         {
             await OnInitializedAsync();
             StateHasChanged();

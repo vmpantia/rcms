@@ -1,13 +1,20 @@
 using Microsoft.AspNetCore.Components.Authorization;
+using RCMS.Web.Helpers;
+using RCMS.Web.Interfaces.Helpers;
+using RCMS.Web.Interfaces.Providers;
+using RCMS.Web.Interfaces.Services;
 using RCMS.Web.Providers;
-using RCMS.Web.Providers.Contracts;
 using RCMS.Web.Services;
-using RCMS.Web.Services.Contracts;
 
 namespace RCMS.Web.Extensions;
 
 public static class ServiceCollectionExtension
 {
+    public static void AddHelpers(this IServiceCollection services)
+    {
+        services.AddScoped<IDialogHelper, DialogHelper>();
+    }
+
     public static void AddProviders(this IServiceCollection services)
     {
         services.AddScoped<IHttpClientProvider, HttpClientProvider>();

@@ -1,6 +1,6 @@
 using RCMS.Shared.Models.Students;
 
-namespace RCMS.Web.Services.Contracts;
+namespace RCMS.Web.Interfaces.Services;
 
 public interface IStudentService
 {

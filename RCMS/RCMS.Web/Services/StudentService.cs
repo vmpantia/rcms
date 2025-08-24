@@ -1,6 +1,6 @@
 using RCMS.Shared.Models.Students;
-using RCMS.Web.Providers.Contracts;
-using RCMS.Web.Services.Contracts;
+using RCMS.Web.Interfaces.Providers;
+using RCMS.Web.Interfaces.Services;
 
 namespace RCMS.Web.Services;
 
