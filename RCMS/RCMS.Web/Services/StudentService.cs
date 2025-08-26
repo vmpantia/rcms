@@ -77,4 +77,18 @@ public class StudentService(IHttpClientProvider httpClientProvider, ILogger<Auth
             throw;
         }
     }
+    
+    public async Task DeleteStudentsAsync(DeleteStudentsDto request)
+    {
+        try
+        {
+            // Send delete of student request to API
+            await httpClientProvider.DeleteAsync<IEnumerable<Guid>>($"https://localhost:7226/api/Students", request);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError($"Error in deleting students. | {ex.Message}");
+            throw;
+        }
+    }
 }

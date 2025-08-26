@@ -26,4 +26,7 @@ public class StudentsController(IMediator mediator) : BaseController(mediator)
     
     [HttpDelete("{id}"), Authorize(Roles = nameof(UserRole.Admin))]
     public async Task<IActionResult> DeleteStudentAsync(Guid id) => await SendRequestAsync(new DeleteStudentCommand(id));
+    
+    [HttpDelete, Authorize(Roles = nameof(UserRole.Admin))]
+    public async Task<IActionResult> DeleteStudentsAsync([FromBody] DeleteStudentsDto request) => await SendRequestAsync(new DeleteStudentsCommand(request));
 }

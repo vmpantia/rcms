@@ -14,19 +14,19 @@ public class DialogHelper(IDialogService dialogService) : IDialogHelper
         return await dialogReference.IsConfirmedAsync();
     }
     
-    public async Task<bool> ShowMessageDialogAsync(string title, string message)
+    public async Task<bool> ShowMessageDialogAsync(string title, string message, string buttonText = "Yes", Color buttonColor = Color.Primary)
     {
-        return await ShowMessageDialogAsync(title, message, null);
+        return await ShowMessageDialogAsync(title, message, null, buttonText, buttonColor);
     }
 
-    public async Task<bool> ShowMessageDialogAsync(string title, RenderFragment content)
+    public async Task<bool> ShowMessageDialogAsync(string title, RenderFragment content, string buttonText = "Yes", Color buttonColor = Color.Primary)
     {
-        return await ShowMessageDialogAsync(title, null, content);
+        return await ShowMessageDialogAsync(title, null, content, buttonText, buttonColor);
     }
 
-    private async Task<bool> ShowMessageDialogAsync(string title, string? message, RenderFragment? content)
+    private async Task<bool> ShowMessageDialogAsync(string title, string? message, RenderFragment? content, string buttonText, Color buttonColor)
     {
-        var parameters = new DialogParameters<MessageDialog> { { md => md.Message, message }, { md => md.Content, content } };
+        var parameters = new DialogParameters<MessageDialog> { { md => md.Message, message }, { md => md.Content, content }, { md => md.ButtonText, buttonText }, { md => md.ButtonColor, buttonColor } };
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
         var dialogReference = await dialogService.ShowAsync<MessageDialog>(title, parameters, options);
         return await dialogReference.IsConfirmedAsync();

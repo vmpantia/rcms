@@ -3,11 +3,17 @@
 <MudDataGrid Items="Items"
              Loading="IsLoading"
              Dense="true"
-             Hover="true">
+             Hover="true"
+             MultiSelection="IsMultipleSelection"
+             SelectedItems="SelectedItems">
     <ToolBarContent>
         @Toolbar
     </ToolBarContent>
     <Columns>
+        @if (IsMultipleSelection)
+        {
+            <SelectColumn T="TData" />
+        }
         @Columns
     </Columns>
     <PagerContent>
@@ -24,7 +30,9 @@
 @code {
     
     [Parameter] public IEnumerable<TData> Items { get; set; }
+    [Parameter] public HashSet<TData> SelectedItems { get; set; }
     [Parameter] public RenderFragment Columns { get; set; }
     [Parameter] public RenderFragment Toolbar { get; set; }
+    [Parameter] public bool IsMultipleSelection { get; set; }    
     [Parameter] public bool IsLoading { get; set; }    
 }

@@ -1,10 +1,11 @@
 
 <MudTooltip Text="@Text">
-    <MudIconButton Icon="@Icon" OnClick="OnButtonClick" />
+    <MudIconButton Icon="@Icon" OnClick="OnButtonClick" Disabled="IsDisabled" />
 </MudTooltip>
 
 @code {
     [Parameter] public string Icon { get; set; }
     [Parameter] public string Text { get; set; }
+    [Parameter] public bool IsDisabled { get; set; }
     [Parameter] public EventCallback OnButtonClick { get; set; }
 }

@@ -9,4 +9,5 @@ public interface IStudentService
     Task CreateStudentAsync(CreateStudentDto request);
     Task UpdateStudentAsync(Guid id, UpdateStudentDto request);
     Task DeleteStudentAsync(Guid id);
+    Task DeleteStudentsAsync(DeleteStudentsDto request);
 }
