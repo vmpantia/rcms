@@ -7,7 +7,6 @@
 @using RCMS.Web.Components.Tables
 @using RCMS.Web.Components.Controls
 @using RCMS.Web.Components.Dialogs
-@using RCMS.Web.Extensions
 @using RCMS.Web.Interfaces.Helpers
 @using RCMS.Web.Interfaces.Services
 
@@ -23,12 +22,12 @@
                           IsMultipleSelection="true">
                     <Toolbar>
                         <IconButton Icon="@Icons.Material.Filled.PersonAdd"
-                                    Text="Create Student" 
-                                    OnButtonClick="OpenCreateStudentDialog" />
+                                    Text="Create Student"
+                                    OnButtonClick="OpenCreateStudentDialogAsync"/>
                         <IconButton Icon="@Icons.Material.Filled.Delete"
-                                    Text="Delete Student(s)" 
+                                    Text="Delete Student(s)"
                                     IsDisabled="@(!_selectedStudents.Any())"
-                                    OnButtonClick="DeleteStudentsAsync" />
+                                    OnButtonClick="DeleteStudentsAsync"/>
                     </Toolbar>
                     <Columns>
                         <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.Name"/>
@@ -42,10 +41,10 @@
                             <DateTimeText Value="@context.LastModifiedAt"
                                           SecondaryText="@context.LastModifiedBy"/>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn TData="StudentLiteDto" Title="Action" CssClass="d-flex justify-end">
-                            <MudMenu Icon="@Icons.Material.Filled.MoreVert">
-                                <MudMenuItem Label="Edit" OnClick="() => OpenUpdateStudentDialog(context)" />
-                                <MudMenuItem Label="Delete" OnClick="() => DeleteStudentAsync(context)" />
+                        <DataGridTemplateColumn TData="StudentLiteDto" Title="Action">
+                            <MudMenu Icon="@Icons.Material.Filled.MoreHoriz">
+                                <MudMenuItem Label="Edit" OnClick="() => OpenUpdateStudentDialogAsync(context)"/>
+                                <MudMenuItem Label="Delete" OnClick="() => DeleteStudentAsync(context)"/>
                             </MudMenu>
                         </DataGridTemplateColumn>
                     </Columns>
@@ -83,13 +82,13 @@
         }
     }
 
-    private async Task OpenCreateStudentDialog()
+    private async Task OpenCreateStudentDialogAsync()
     {
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
         await OpenCreateOrUpdateStudentDialog<CreateStudentDialog>("Create Student", new DialogParameters(), options);
     } 
 
-    private async Task OpenUpdateStudentDialog(StudentLiteDto dto)
+    private async Task OpenUpdateStudentDialogAsync(StudentLiteDto dto)
     {
         var parameters = new DialogParameters<UpdateStudentDialog> { { usd => usd.StudentId, dto.Id } };
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
