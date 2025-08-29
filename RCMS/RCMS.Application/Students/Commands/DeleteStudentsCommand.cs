@@ -11,7 +11,7 @@ public sealed class DeleteStudentsCommandHandler(IStudentRepository studentRepos
 {
     public async Task<Result<IEnumerable<Guid>>> Handle(DeleteStudentsCommand request, CancellationToken cancellationToken)
     {
-        // Delete students on the database
+        // Delete data on the database
         await studentRepository.DeleteAsync(request.Students.Ids, cancellationToken);
 
         return request.Students.Ids.ToList();

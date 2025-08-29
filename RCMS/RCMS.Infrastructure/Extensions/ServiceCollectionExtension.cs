@@ -36,6 +36,7 @@ public static class ServiceCollectionExtension
     private static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IStudentRepository, StudentRepository>();
+        services.AddScoped<IInstructorRepository, InstructorRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
     }
 }

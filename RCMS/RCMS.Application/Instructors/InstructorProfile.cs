@@ -1,28 +1,25 @@
 using AutoMapper;
 using RCMS.Domain.Entities;
 using RCMS.Infrastructure.Extensions;
-using RCMS.Shared.Enumerations;
-using RCMS.Shared.Models.Students;
+using RCMS.Shared.Models.Instructors;
 
-namespace RCMS.Application.Students;
+namespace RCMS.Application.Instructors;
 
-public class StudentProfile : Profile
+public class InstructorProfile : Profile
 {
-    public StudentProfile()
+    public InstructorProfile()
     {
-        CreateMap<Student, StudentLiteDto>()
+        CreateMap<Instructor, InstructorLiteDto>()
             .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.GetFormattedName()))
             .ForMember(dst => dst.Initials, opt => opt.MapFrom(src => src.GetInitials()))
-            .ForMember(dst => dst.NoOfOngoingEnrollments, opt => opt.MapFrom(src => src.Enrollments.Count(e => e.Status == EnrollmentStatus.InProgress)))
             .ForMember(dst => dst.LastModifiedAt, opt => opt.MapFrom(src => src.ModifiedAt ?? src.CreatedAt))
             .ForMember(dst => dst.LastModifiedBy, opt => opt.MapFrom(src => src.ModifiedBy ?? src.CreatedBy));
-        CreateMap<Student, StudentDto>()
+        CreateMap<Instructor, InstructorDto>()
             .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.GetFormattedName()))
             .ForMember(dst => dst.Initials, opt => opt.MapFrom(src => src.GetInitials()))
-            .ForMember(dst => dst.NoOfOngoingEnrollments, opt => opt.MapFrom(src => src.Enrollments.Count(e => e.Status == EnrollmentStatus.InProgress)))
             .ForMember(dst => dst.LastModifiedAt, opt => opt.MapFrom(src => src.ModifiedAt ?? src.CreatedAt))
             .ForMember(dst => dst.LastModifiedBy, opt => opt.MapFrom(src => src.ModifiedBy ?? src.CreatedBy));
-        CreateMap<CreateStudentDto, Student>();
-        CreateMap<UpdateStudentDto, Student>();
+        CreateMap<CreateInstructorDto, Instructor>();
+        CreateMap<UpdateInstructorDto, Instructor>();
     }
 }

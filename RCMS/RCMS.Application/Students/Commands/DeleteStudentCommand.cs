@@ -11,15 +11,15 @@ public sealed class DeleteStudentCommandHandler(IStudentRepository studentReposi
 {
     public async Task<Result<Guid>> Handle(DeleteStudentCommand request, CancellationToken cancellationToken)
     {
-        // Get student stored on the database using a student id
-        var studentToDelete = await studentRepository.GetOneAsync(s => s.Id == request.Id, cancellationToken);
+        // Get data stored on the database using id
+        var dataToDelete = await studentRepository.GetOneAsync(s => s.Id == request.Id, cancellationToken);
         
-        // Check if a student is NULL or not exist
-        if (studentToDelete is null) return StudentError.NotFound(request.Id);
+        // Check if data is NULL or not exist
+        if (dataToDelete is null) return StudentError.NotFound(request.Id);
         
-        // Delete student on the database
-        await studentRepository.DeleteAsync(studentToDelete, cancellationToken);
+        // Delete data on the database
+        await studentRepository.DeleteAsync(dataToDelete, cancellationToken);
 
-        return studentToDelete.Id;
+        return dataToDelete.Id;
     }
 }

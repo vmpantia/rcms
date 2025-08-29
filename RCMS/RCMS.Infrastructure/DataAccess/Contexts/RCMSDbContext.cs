@@ -44,6 +44,8 @@ public class RCMSDbContext : DbContext
         modelBuilder.Entity<Instructor>(builder =>
         {
             builder.HasKey(i => i.Id);
+            
+            builder.HasQueryFilter(e => e.DeletedAt == null && string.IsNullOrEmpty(e.DeletedBy));
         });
         
         modelBuilder.Entity<Schedule>(builder =>

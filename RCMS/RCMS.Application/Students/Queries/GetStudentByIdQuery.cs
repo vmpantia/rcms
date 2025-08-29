@@ -14,16 +14,16 @@ public sealed class GetStudentByIdQueryHandler(IStudentRepository studentReposit
 {
     public async Task<Result<StudentDto>> Handle(GetStudentByIdQuery request, CancellationToken cancellationToken)
     {
-        // Get student stored on the database using a student id
-        var student = await studentRepository.Get(s => s.Id == request.Id)
+        // Get data stored on the database using id
+        var data = await studentRepository.Get(s => s.Id == request.Id)
             .Include(tbl => tbl.Enrollments)
             .FirstOrDefaultAsync(cancellationToken);
         
-        // Check if a student is NULL or not exist
-        if (student is null) return StudentError.NotFound(request.Id);
+        // Check if data is NULL or not exist
+        if (data is null) return StudentError.NotFound(request.Id);
         
-        // Map student to dto object
-        var result = mapper.Map<StudentDto>(student);
+        // Map data to dto object
+        var result = mapper.Map<StudentDto>(data);
         
         return result;
     }

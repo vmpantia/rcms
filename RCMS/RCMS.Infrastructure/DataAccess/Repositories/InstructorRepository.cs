@@ -5,15 +5,15 @@ using RCMS.Infrastructure.DataAccess.Contexts;
 
 namespace RCMS.Infrastructure.DataAccess.Repositories;
 
-public sealed class StudentRepository(RCMSDbContext context) : BaseRepository<Student>(context), IStudentRepository
+public sealed class InstructorRepository(RCMSDbContext context) : BaseRepository<Instructor>(context), IInstructorRepository
 {
     public async Task DeleteAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
-    {        
-        var dataToDelete = await context.Students
+    {
+        var dataToDelete = await context.Instructors
             .Where(s => ids.Contains(s.Id))
             .ToListAsync(cancellationToken);
         
-        context.Students.RemoveRange(dataToDelete);
+        context.Instructors.RemoveRange(dataToDelete);
         
         await context.SaveChangesAsync(cancellationToken);
     }

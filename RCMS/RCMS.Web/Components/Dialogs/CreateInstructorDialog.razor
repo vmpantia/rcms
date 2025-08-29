@@ -1,0 +1,54 @@
+@using RCMS.Shared.Models.Instructors
+@using RCMS.Web.Components.Forms
+@using RCMS.Web.Interfaces.Helpers
+@using RCMS.Web.Interfaces.Services
+
+<MudDialog>
+    <DialogContent>
+        <InstructorForm TInstructor="CreateInstructorDto"
+                        Instructor="@_instructor" 
+                        ErrorMessage="@_errorMessage"
+                        IsSubmitting="_isCreating"
+                        OnSubmitButtonClick="CreateInstructorAsync"/>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [Inject] public IInstructorService InstructorService { get; set; }
+    [Inject] public IDialogHelper DialogHelper { get; set; }
+    [Inject] public ISnackbar Snackbar { get; set; }
+
+    [CascadingParameter] public IMudDialogInstance MudDialog { get; set; }
+    
+    private CreateInstructorDto _instructor = new();
+    private bool _isCreating;
+    private string _errorMessage = string.Empty;
+
+    private async Task CreateInstructorAsync()
+    {
+        try
+        {
+            var isConfirmed = await DialogHelper.ShowMessageDialogAsync("Confirm Creation", "Are you sure you want to create this instructor?");
+            if (isConfirmed)
+            {
+                StateHasChanged();
+                _errorMessage = string.Empty;
+                _isCreating = true;
+            
+                await InstructorService.CreateInstructorAsync(_instructor);
+            
+                // Alert user for success request and close dialog
+                Snackbar.Add("Instructor created successfully.", Severity.Success);
+                MudDialog.Close(DialogResult.Ok(true));
+            }
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+        }
+        finally
+        {
+            _isCreating = false;
+        }
+    }
+}

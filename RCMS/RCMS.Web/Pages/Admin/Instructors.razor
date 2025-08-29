@@ -1,0 +1,161 @@
+@page "/Instructors"
+@using Microsoft.AspNetCore.Authorization
+@using RCMS.Shared.Enumerations
+@using RCMS.Shared.Models.Instructors
+@using RCMS.Web.Components.Tables
+@using RCMS.Web.Interfaces.Services
+@using RCMS.Web.Components.Texts
+@using RCMS.Web.Components.Chips
+@using RCMS.Web.Components.Controls
+@using RCMS.Web.Components.Dialogs
+@using RCMS.Web.Interfaces.Helpers
+
+@attribute [Authorize(Roles = nameof(UserRole.Admin))]
+
+<PageContent Title="Instructors" Description="List of instructors stored on our database.">
+    <ChildComponent>
+        <MudGrid>
+            <MudItem xs="12">
+                <DataGrid Items="_instructors"
+                          SelectedItems="_selectedInstructors"
+                          IsLoading="_isLoading"
+                          IsMultipleSelection="true">
+                    <Toolbar>
+                        <IconButton Icon="@Icons.Material.Filled.PersonAdd"
+                                    Text="Create Instructor"
+                                    OnButtonClick="OpenCreateInstructorDialogAsync"/>
+                        <IconButton Icon="@Icons.Material.Filled.Delete"
+                                    Text="Delete Instructor(s)"
+                                    IsDisabled="@(!_selectedInstructors.Any())"
+                                    OnButtonClick="DeleteInstructorsAsync"/>
+                    </Toolbar>
+                    <Columns>
+                        <DataGridPropertyColumn TData="InstructorLiteDto" Title="Name" Property="s => s.Name"/>
+                        <DataGridPropertyColumn TData="InstructorLiteDto" Title="Phone Number" Property="s => s.PhoneNumber"/>
+                        <DataGridPropertyColumn TData="InstructorLiteDto" Title="Email Address" Property="s => s.EmailAddress"/>
+                        <DataGridTemplateColumn TData="InstructorLiteDto" Title="Status" IsSortable="true" SortBy="s => s.Status">
+                            <InstructorStatusChip Status="@context.Status"/>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn TData="InstructorLiteDto" Title="Last Modified" IsSortable="true" SortBy="s => s.LastModifiedAt">
+                            <DateTimeText Value="@context.LastModifiedAt"
+                                          SecondaryText="@context.LastModifiedBy"/>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn TData="InstructorLiteDto" Title="Action">
+                            <MudMenu Icon="@Icons.Material.Filled.MoreHoriz">
+                                <MudMenuItem Label="Edit" OnClick="() => OpenUpdateInstructorDialogAsync(context)"/>
+                                <MudMenuItem Label="Delete" OnClick="() => DeleteInstructorAsync(context)"/>
+                            </MudMenu>
+                        </DataGridTemplateColumn>
+                    </Columns>
+                </DataGrid>
+            </MudItem>
+        </MudGrid>
+    </ChildComponent>
+</PageContent>
+
+@code {
+    
+    [Inject] public IInstructorService InstructorService { get; set; }
+    [Inject] public ISnackbar Snackbar { get; set; }
+    [Inject] public IDialogHelper DialogHelper { get; set; }
+
+    private IEnumerable<InstructorLiteDto> _instructors = new List<InstructorLiteDto>();
+    private HashSet<InstructorLiteDto> _selectedInstructors = new();
+    private bool _isLoading = true;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _isLoading = true;
+            _selectedInstructors = new();
+            _instructors = await InstructorService.GetInstructorsAsync();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task OpenCreateInstructorDialogAsync()
+    {
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        await OpenCreateOrUpdateInstructorDialog<CreateInstructorDialog>("Create Instructor", new DialogParameters(), options);
+    } 
+
+    private async Task OpenUpdateInstructorDialogAsync(InstructorLiteDto dto)
+    {
+        var parameters = new DialogParameters<UpdateInstructorDialog> { { usd => usd.InstructorId, dto.Id } };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        await OpenCreateOrUpdateInstructorDialog<UpdateInstructorDialog>("Update Instructor", parameters, options);
+    } 
+ 
+    private async Task OpenCreateOrUpdateInstructorDialog<TDialog>(string title, DialogParameters parameters, DialogOptions options) where TDialog : IComponent
+    {
+        // Handle dialog result
+        var result = await DialogHelper.ShowDialogAsync<TDialog>(title, parameters, options);
+        if (result)
+        {
+            StateHasChanged();
+            await OnInitializedAsync();
+        }
+    }
+
+    private async Task DeleteInstructorAsync(InstructorLiteDto dto)
+    {
+        try
+        {
+            var isConfirmed = await DialogHelper.ShowMessageDialogAsync(
+                "Confirm Deletion", 
+                "Are you sure you want to delete this instructor?",
+                "Delete",
+                Color.Error);
+            if (isConfirmed)
+            {
+                StateHasChanged();
+            
+                await InstructorService.DeleteInstructorAsync(dto.Id);
+                await OnInitializedAsync();
+            
+                // Alert user for success request and close dialog
+                Snackbar.Add("Instructor deleted successfully.", Severity.Success);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task DeleteInstructorsAsync()
+    {
+        try
+        {
+            var isConfirmed = await DialogHelper.ShowMessageDialogAsync(
+                "Confirm Deletion", 
+                $"Are you sure you want to delete this {_selectedInstructors.Count} instructor(s)?",
+                "Delete",
+                Color.Error);
+            if (isConfirmed)
+            {
+                StateHasChanged();
+
+                var request = new DeleteInstructorsDto { Ids = _selectedInstructors.Select(ss => ss.Id) };
+                await InstructorService.DeleteInstructorsAsync(request);
+                await OnInitializedAsync();
+            
+                // Alert user for success request and close dialog
+                Snackbar.Add("Instructors deleted successfully.", Severity.Success);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+    
+}

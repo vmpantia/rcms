@@ -21,7 +21,7 @@ public sealed class CreateStudentCommandValidator : AbstractValidator<CreateStud
         RuleFor(csc => csc.Student)
             .MustAsync(async (csd, ct) =>
             {
-                // Check if the student already exists on the database by checking first name and last name
+                // Check if the data already exists on the database
                 var result = await studentRepository.IsExistAsync(
                     expression: s => s.FirstName == csd.FirstName && s.LastName == csd.LastName,
                     cancellationToken: ct);
@@ -35,10 +35,10 @@ public sealed class CreateStudentCommandHandler(IStudentRepository studentReposi
 {
     public async Task<Result<Guid>> Handle(CreateStudentCommand request, CancellationToken cancellationToken)
     {
-        // Map student to entity
+        // Map data to entity
         var entity = mapper.Map<Student>(request.Student);
 
-        // Create student on the database
+        // Create data on the database
         var result = await studentRepository.CreateAsync(entity, cancellationToken);
 
         return result.Id;

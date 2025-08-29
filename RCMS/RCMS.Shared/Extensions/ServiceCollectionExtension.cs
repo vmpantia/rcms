@@ -1,6 +1,7 @@
 using System.Reflection;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using RCMS.Shared.Models.Instructors;
 using RCMS.Shared.Models.Students;
 using RCMS.Shared.Validators;
 
@@ -16,5 +17,7 @@ public static class ServiceCollectionExtension
         // Manual registration for using base validator
         services.AddScoped<IValidator<CreateStudentDto>, CreateStudentValidator>();
         services.AddScoped<IValidator<UpdateStudentDto>, UpdateStudentValidator>();
+        services.AddScoped<IValidator<CreateInstructorDto>, CreateInstructorValidator>();
+        services.AddScoped<IValidator<UpdateInstructorDto>, UpdateInstructorValidator>();
     }
 }

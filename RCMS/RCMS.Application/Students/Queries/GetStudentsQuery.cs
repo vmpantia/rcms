@@ -13,16 +13,16 @@ public sealed class GetStudentsQueryHandler(IStudentRepository studentRepository
 {
     public async Task<Result<IEnumerable<StudentLiteDto>>> Handle(GetStudentsQuery request, CancellationToken cancellationToken)
     {
-        // Get students stored on the database
-        var students = await studentRepository.Get()
+        // Get data stored on the database
+        var data = await studentRepository.Get()
             .Include(tbl => tbl.Enrollments)
             .OrderByDescending(tbl => tbl.CreatedAt)
             .AsNoTracking()
             .AsSplitQuery()
             .ToListAsync(cancellationToken);
         
-        // Map students to lite objects
-        var result = mapper.Map<List<StudentLiteDto>>(students);
+        // Map data to lite objects
+        var result = mapper.Map<List<StudentLiteDto>>(data);
 
         return result;
     }

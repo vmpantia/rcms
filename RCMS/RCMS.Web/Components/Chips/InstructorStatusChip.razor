@@ -1,0 +1,18 @@
+@using RCMS.Shared.Enumerations
+
+<MudChip T="string" Variant="Variant.Filled" Label="true" Color="@Color" Size="Size.Small">
+    @Status.ToString()
+</MudChip>
+
+@code {
+    [Parameter] public InstructorStatus Status { get; set; }
+
+    private Color Color => Status switch
+    {
+        InstructorStatus.Active => Color.Success,
+        InstructorStatus.Inactive or InstructorStatus.Retired or 
+            InstructorStatus.PendingApproval or InstructorStatus.Archived => Color.Dark,
+        InstructorStatus.Suspended or InstructorStatus.Terminated => Color.Error,
+        _ => Color.Default,
+    };
+}
