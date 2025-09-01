@@ -8,7 +8,7 @@ public class CourseSession : BaseEntity
     public Guid CourseId { get; set; }
     public Guid InstructorId { get; set; }
     public string Name { get; set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public CourseSessionStatus Status { get; set; }
     
     public virtual Course Course { get; set; }

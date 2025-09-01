@@ -12,8 +12,8 @@ using RCMS.Infrastructure.DataAccess.Contexts;
 namespace RCMS.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(RCMSDbContext))]
-    [Migration("20250901020441_AddInitialTables")]
-    partial class AddInitialTables
+    [Migration("20250901021004_AddIniitalTables")]
+    partial class AddIniitalTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,7 +48,6 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedAt")
@@ -91,7 +90,6 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedAt")
@@ -135,7 +133,6 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("InstructorId")
