@@ -22,6 +22,13 @@ public abstract class DataSeeder
             await context.Instructors.AddRangeAsync(dummyInstructors);
             await context.SaveChangesAsync();
         }
+
+        if (!context.CourseCategories.Any())
+        {
+            var dummyCourseCategories = GenerateCourseCategories();
+            await context.CourseCategories.AddRangeAsync(dummyCourseCategories);
+            await context.SaveChangesAsync();
+        }
     }
     
     private static List<Student> GenerateStudents(int count = 100)
@@ -50,6 +57,16 @@ public abstract class DataSeeder
             .RuleFor(s => s.PhoneNumber, f => f.Person.Phone)
             .RuleFor(s => s.EmailAddress, f => f.Person.Email)
             .RuleFor(s => s.Status, f => f.PickRandom<InstructorStatus>());        
+        
+        return faker.Generate(count);
+    }
+
+    private static List<CourseCategory> GenerateCourseCategories(int count = 100)
+    {
+        var faker = new Faker<CourseCategory>()
+            .RuleFor(s => s.Id, f => Guid.NewGuid())
+            .RuleFor(s => s.Name, f => f.Company.CompanyName())
+            .RuleFor(s => s.Status, f => f.PickRandom<CourseCategoryStatus>());        
         
         return faker.Generate(count);
     }

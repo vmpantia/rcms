@@ -12,7 +12,7 @@ using RCMS.Infrastructure.DataAccess.Contexts;
 namespace RCMS.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(RCMSDbContext))]
-    [Migration("20250901014853_AddInitialTables")]
+    [Migration("20250901020441_AddInitialTables")]
     partial class AddInitialTables
     {
         /// <inheritdoc />
@@ -109,7 +109,7 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CourseCategory");
+                    b.ToTable("CourseCategories");
                 });
 
             modelBuilder.Entity("RCMS.Domain.Entities.CourseSession", b =>
@@ -160,7 +160,7 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("CourseSession");
+                    b.ToTable("CourseSessions");
                 });
 
             modelBuilder.Entity("RCMS.Domain.Entities.Enrollment", b =>

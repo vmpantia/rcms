@@ -106,7 +106,7 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CourseCategory");
+                    b.ToTable("CourseCategories");
                 });
 
             modelBuilder.Entity("RCMS.Domain.Entities.CourseSession", b =>
@@ -157,7 +157,7 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("CourseSession");
+                    b.ToTable("CourseSessions");
                 });
 
             modelBuilder.Entity("RCMS.Domain.Entities.Enrollment", b =>

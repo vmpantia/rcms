@@ -9,6 +9,8 @@ public class RCMSDbContext : DbContext
     public RCMSDbContext(DbContextOptions options) : base(options) { }
 
     public DbSet<Course> Courses { get; set; }
+    public DbSet<CourseCategory> CourseCategories { get; set; }
+    public DbSet<CourseSession> CourseSessions { get; set; }
     public DbSet<Enrollment> Enrollments { get; set; }
     public DbSet<Instructor> Instructors { get; set; }
     public DbSet<Schedule> Schedules { get; set; }

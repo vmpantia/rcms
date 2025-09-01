@@ -12,7 +12,7 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "CourseCategory",
+                name: "CourseCategories",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -28,7 +28,7 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseCategory", x => x.Id);
+                    table.PrimaryKey("PK_CourseCategories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -130,15 +130,15 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Courses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Courses_CourseCategory_CategoryId",
+                        name: "FK_Courses_CourseCategories_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "CourseCategory",
+                        principalTable: "CourseCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CourseSession",
+                name: "CourseSessions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -156,15 +156,15 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseSession", x => x.Id);
+                    table.PrimaryKey("PK_CourseSessions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CourseSession_Courses_CourseId",
+                        name: "FK_CourseSessions_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CourseSession_Instructors_InstructorId",
+                        name: "FK_CourseSessions_Instructors_InstructorId",
                         column: x => x.InstructorId,
                         principalTable: "Instructors",
                         principalColumn: "Id",
@@ -192,9 +192,9 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Enrollments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Enrollments_CourseSession_SessionId",
+                        name: "FK_Enrollments_CourseSessions_SessionId",
                         column: x => x.SessionId,
-                        principalTable: "CourseSession",
+                        principalTable: "CourseSessions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -225,9 +225,9 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Schedules", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Schedules_CourseSession_SessionId",
+                        name: "FK_Schedules_CourseSessions_SessionId",
                         column: x => x.SessionId,
-                        principalTable: "CourseSession",
+                        principalTable: "CourseSessions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -238,13 +238,13 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseSession_CourseId",
-                table: "CourseSession",
+                name: "IX_CourseSessions_CourseId",
+                table: "CourseSessions",
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseSession_InstructorId",
-                table: "CourseSession",
+                name: "IX_CourseSessions_InstructorId",
+                table: "CourseSessions",
                 column: "InstructorId");
 
             migrationBuilder.CreateIndex(
@@ -279,7 +279,7 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 name: "Students");
 
             migrationBuilder.DropTable(
-                name: "CourseSession");
+                name: "CourseSessions");
 
             migrationBuilder.DropTable(
                 name: "Courses");
@@ -288,7 +288,7 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 name: "Instructors");
 
             migrationBuilder.DropTable(
-                name: "CourseCategory");
+                name: "CourseCategories");
         }
     }
 }
