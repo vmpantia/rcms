@@ -18,4 +18,8 @@
       <ProjectReference Include="..\RCMS.Infrastructure\RCMS.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Courses\Commands\" />
+    </ItemGroup>
+
 </Project>

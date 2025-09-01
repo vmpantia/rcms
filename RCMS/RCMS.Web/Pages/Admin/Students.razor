@@ -33,7 +33,7 @@
                         <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.Name"/>
                         <DataGridPropertyColumn TData="StudentLiteDto" Title="Phone Number" Property="s => s.PhoneNumber"/>
                         <DataGridPropertyColumn TData="StudentLiteDto" Title="Email Address" Property="s => s.EmailAddress"/>
-                        <DataGridPropertyColumn TData="StudentLiteDto" Title="No of Ongoing Enrollments" Property="s => s.NoOfOngoingEnrollments.ToString()"/>
+                        <DataGridPropertyColumn TData="StudentLiteDto" Title="No. of Ongoing Enrollments" Property="s => s.NoOfOngoingEnrollments.ToString()"/>
                         <DataGridTemplateColumn TData="StudentLiteDto" Title="Status" IsSortable="true" SortBy="s => s.Status">
                             <StudentStatusChip Status="@context.Status"/>
                         </DataGridTemplateColumn>

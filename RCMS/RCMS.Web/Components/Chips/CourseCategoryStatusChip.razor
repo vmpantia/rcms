@@ -1,0 +1,16 @@
+@using RCMS.Shared.Enumerations
+
+<MudChip T="string" Variant="Variant.Filled" Label="true" Color="@Color" Size="Size.Small">
+    @Status.ToString()
+</MudChip>
+
+@code {
+    [Parameter] public CourseCategoryStatus Status { get; set; }
+
+    private Color Color => Status switch
+    {
+        CourseCategoryStatus.Active => Color.Success,
+        CourseCategoryStatus.Inactive => Color.Dark,
+        _ => Color.Default,
+    };
+}

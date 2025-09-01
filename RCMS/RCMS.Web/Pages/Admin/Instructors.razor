@@ -30,13 +30,13 @@
                                     OnButtonClick="DeleteInstructorsAsync"/>
                     </Toolbar>
                     <Columns>
-                        <DataGridPropertyColumn TData="InstructorLiteDto" Title="Name" Property="s => s.Name"/>
-                        <DataGridPropertyColumn TData="InstructorLiteDto" Title="Phone Number" Property="s => s.PhoneNumber"/>
-                        <DataGridPropertyColumn TData="InstructorLiteDto" Title="Email Address" Property="s => s.EmailAddress"/>
-                        <DataGridTemplateColumn TData="InstructorLiteDto" Title="Status" IsSortable="true" SortBy="s => s.Status">
+                        <DataGridPropertyColumn TData="InstructorLiteDto" Title="Name" Property="i => i.Name"/>
+                        <DataGridPropertyColumn TData="InstructorLiteDto" Title="Phone Number" Property="i => i.PhoneNumber"/>
+                        <DataGridPropertyColumn TData="InstructorLiteDto" Title="Email Address" Property="i => i.EmailAddress"/>
+                        <DataGridTemplateColumn TData="InstructorLiteDto" Title="Status" IsSortable="true" SortBy="i => i.Status">
                             <InstructorStatusChip Status="@context.Status"/>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn TData="InstructorLiteDto" Title="Last Modified" IsSortable="true" SortBy="s => s.LastModifiedAt">
+                        <DataGridTemplateColumn TData="InstructorLiteDto" Title="Last Modified" IsSortable="true" SortBy="i => i.LastModifiedAt">
                             <DateTimeText Value="@context.LastModifiedAt"
                                           SecondaryText="@context.LastModifiedBy"/>
                         </DataGridTemplateColumn>
