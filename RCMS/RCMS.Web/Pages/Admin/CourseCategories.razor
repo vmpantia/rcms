@@ -1,4 +1,4 @@
-@page "/Courses/Categories"
+@page "/courses/categories"
 @using Microsoft.AspNetCore.Authorization
 @using RCMS.Shared.Enumerations
 @using RCMS.Shared.Models.Courses
@@ -9,7 +9,7 @@
 
 @attribute [Authorize(Roles = nameof(UserRole.Admin))]
 
-<PageContent Title="Course Categories" Description="List of course categories stored on our database.">
+<PageContent Title="Categories" Description="List of categories stored on our database.">
     <ChildComponent>
         <MudGrid>
             <MudItem xs="12">
