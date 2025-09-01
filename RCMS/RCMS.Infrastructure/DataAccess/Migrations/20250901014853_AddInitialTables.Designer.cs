@@ -12,8 +12,8 @@ using RCMS.Infrastructure.DataAccess.Contexts;
 namespace RCMS.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(RCMSDbContext))]
-    [Migration("20250822062859_AddUsersTable")]
-    partial class AddUsersTable
+    [Migration("20250901014853_AddInitialTables")]
+    partial class AddInitialTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,53 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("RCMS.Infrastructure.DataAccess.Entities.Course", b =>
+            modelBuilder.Entity("RCMS.Domain.Entities.Course", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("RCMS.Domain.Entities.CourseCategory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,10 +94,51 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DurationInHours")
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("InstructorId")
+                    b.HasKey("Id");
+
+                    b.ToTable("CourseCategory");
+                });
+
+            modelBuilder.Entity("RCMS.Domain.Entities.CourseSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("InstructorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("ModifiedAt")
@@ -60,27 +147,26 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("Courses");
+                    b.ToTable("CourseSession");
                 });
 
-            modelBuilder.Entity("RCMS.Infrastructure.DataAccess.Entities.Enrollment", b =>
+            modelBuilder.Entity("RCMS.Domain.Entities.Enrollment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
@@ -105,6 +191,9 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -116,14 +205,14 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex("SessionId");
 
                     b.HasIndex("StudentId");
 
                     b.ToTable("Enrollments");
                 });
 
-            modelBuilder.Entity("RCMS.Infrastructure.DataAccess.Entities.Instructor", b =>
+            modelBuilder.Entity("RCMS.Domain.Entities.Instructor", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -181,13 +270,10 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                     b.ToTable("Instructors");
                 });
 
-            modelBuilder.Entity("RCMS.Infrastructure.DataAccess.Entities.Schedule", b =>
+            modelBuilder.Entity("RCMS.Domain.Entities.Schedule", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
@@ -215,17 +301,20 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<TimeSpan>("StartTime")
                         .HasColumnType("time");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex("SessionId");
 
                     b.ToTable("Schedules");
                 });
 
-            modelBuilder.Entity("RCMS.Infrastructure.DataAccess.Entities.Student", b =>
+            modelBuilder.Entity("RCMS.Domain.Entities.Student", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -283,7 +372,7 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("RCMS.Infrastructure.DataAccess.Entities.User", b =>
+            modelBuilder.Entity("RCMS.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -355,56 +444,89 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RCMS.Infrastructure.DataAccess.Entities.Course", b =>
+            modelBuilder.Entity("RCMS.Domain.Entities.Course", b =>
                 {
-                    b.HasOne("RCMS.Infrastructure.DataAccess.Entities.Instructor", null)
+                    b.HasOne("RCMS.Domain.Entities.CourseCategory", "Category")
                         .WithMany("Courses")
-                        .HasForeignKey("InstructorId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("RCMS.Infrastructure.DataAccess.Entities.Enrollment", b =>
+            modelBuilder.Entity("RCMS.Domain.Entities.CourseSession", b =>
                 {
-                    b.HasOne("RCMS.Infrastructure.DataAccess.Entities.Course", "Course")
-                        .WithMany("Enrollments")
+                    b.HasOne("RCMS.Domain.Entities.Course", "Course")
+                        .WithMany("Sessions")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RCMS.Infrastructure.DataAccess.Entities.Student", "Student")
+                    b.HasOne("RCMS.Domain.Entities.Instructor", "Instructor")
+                        .WithMany("Sessions")
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("RCMS.Domain.Entities.Enrollment", b =>
+                {
+                    b.HasOne("RCMS.Domain.Entities.CourseSession", "Session")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RCMS.Domain.Entities.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Course");
+                    b.Navigation("Session");
 
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("RCMS.Infrastructure.DataAccess.Entities.Schedule", b =>
+            modelBuilder.Entity("RCMS.Domain.Entities.Schedule", b =>
                 {
-                    b.HasOne("RCMS.Infrastructure.DataAccess.Entities.Course", "Course")
+                    b.HasOne("RCMS.Domain.Entities.CourseSession", "Session")
                         .WithMany("Schedules")
-                        .HasForeignKey("CourseId")
+                        .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Course");
+                    b.Navigation("Session");
                 });
 
-            modelBuilder.Entity("RCMS.Infrastructure.DataAccess.Entities.Course", b =>
+            modelBuilder.Entity("RCMS.Domain.Entities.Course", b =>
+                {
+                    b.Navigation("Sessions");
+                });
+
+            modelBuilder.Entity("RCMS.Domain.Entities.CourseCategory", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("RCMS.Domain.Entities.CourseSession", b =>
                 {
                     b.Navigation("Enrollments");
 
                     b.Navigation("Schedules");
                 });
 
-            modelBuilder.Entity("RCMS.Infrastructure.DataAccess.Entities.Instructor", b =>
+            modelBuilder.Entity("RCMS.Domain.Entities.Instructor", b =>
                 {
-                    b.Navigation("Courses");
+                    b.Navigation("Sessions");
                 });
 
-            modelBuilder.Entity("RCMS.Infrastructure.DataAccess.Entities.Student", b =>
+            modelBuilder.Entity("RCMS.Domain.Entities.Student", b =>
                 {
                     b.Navigation("Enrollments");
                 });

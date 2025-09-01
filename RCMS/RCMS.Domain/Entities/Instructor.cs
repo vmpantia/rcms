@@ -14,5 +14,5 @@ public class Instructor : BaseEntity, IPersonalInfoEntity
     public string PhoneNumber { get; set; }
     public string EmailAddress { get; set; }
     public InstructorStatus Status { get; set; }
-    public ICollection<Course> Courses { get; set; }
+    public ICollection<CourseSession> Sessions { get; set; }
 }

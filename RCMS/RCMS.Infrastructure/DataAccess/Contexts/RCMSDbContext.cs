@@ -20,8 +20,37 @@ public class RCMSDbContext : DbContext
         modelBuilder.Entity<Course>(builder =>
         {
             builder.HasKey(c => c.Id);
+
+            builder.HasOne(c => c.Category)
+                .WithMany(cc => cc.Courses)
+                .HasForeignKey(c => c.CategoryId)
+                .IsRequired();
             
-            builder.HasQueryFilter(e => e.DeletedAt == null && string.IsNullOrEmpty(e.DeletedBy));
+            builder.HasQueryFilter(cc => cc.DeletedAt == null && string.IsNullOrEmpty(cc.DeletedBy));
+        });
+        
+        modelBuilder.Entity<CourseCategory>(builder =>
+        {
+            builder.HasKey(cc => cc.Id);
+            
+            builder.HasQueryFilter(cc => cc.DeletedAt == null && string.IsNullOrEmpty(cc.DeletedBy));
+        });
+        
+        modelBuilder.Entity<CourseSession>(builder =>
+        {
+            builder.HasKey(c => c.Id);
+            
+            builder.HasOne(cs => cs.Course)
+                .WithMany(c => c.Sessions)
+                .HasForeignKey(cs => cs.CourseId)
+                .IsRequired();
+            
+            builder.HasOne(cs => cs.Instructor)
+                .WithMany(i => i.Sessions)
+                .HasForeignKey(cs => cs.InstructorId)
+                .IsRequired();
+            
+            builder.HasQueryFilter(cs => cs.DeletedAt == null && string.IsNullOrEmpty(cs.DeletedBy));
         });
 
         modelBuilder.Entity<Enrollment>(builder =>
@@ -33,9 +62,9 @@ public class RCMSDbContext : DbContext
                 .HasForeignKey(e => e.StudentId)
                 .IsRequired();
             
-            builder.HasOne(e => e.Course)
-                .WithMany(c => c.Enrollments)
-                .HasForeignKey(e => e.CourseId)
+            builder.HasOne(e => e.Session)
+                .WithMany(cs => cs.Enrollments)
+                .HasForeignKey(e => e.SessionId)
                 .IsRequired();
             
             builder.HasQueryFilter(e => e.DeletedAt == null && string.IsNullOrEmpty(e.DeletedBy));
@@ -45,33 +74,33 @@ public class RCMSDbContext : DbContext
         {
             builder.HasKey(i => i.Id);
             
-            builder.HasQueryFilter(e => e.DeletedAt == null && string.IsNullOrEmpty(e.DeletedBy));
+            builder.HasQueryFilter(i => i.DeletedAt == null && string.IsNullOrEmpty(i.DeletedBy));
         });
         
         modelBuilder.Entity<Schedule>(builder =>
         {
             builder.HasKey(s => s.Id);
             
-            builder.HasOne(s => s.Course)
-                .WithMany(c => c.Schedules)
-                .HasForeignKey(s => s.CourseId)
+            builder.HasOne(s => s.Session)
+                .WithMany(cs => cs.Schedules)
+                .HasForeignKey(s => s.SessionId)
                 .IsRequired();
             
-            builder.HasQueryFilter(e => e.DeletedAt == null && string.IsNullOrEmpty(e.DeletedBy));
+            builder.HasQueryFilter(s => s.DeletedAt == null && string.IsNullOrEmpty(s.DeletedBy));
         });
         
         modelBuilder.Entity<Student>(builder =>
         {
             builder.HasKey(s => s.Id);
             
-            builder.HasQueryFilter(e => e.DeletedAt == null && string.IsNullOrEmpty(e.DeletedBy));
+            builder.HasQueryFilter(s => s.DeletedAt == null && string.IsNullOrEmpty(s.DeletedBy));
         });
 
         modelBuilder.Entity<User>(builder =>
         {
             builder.HasKey(u => u.Id);
             
-            builder.HasQueryFilter(e => e.DeletedAt == null && string.IsNullOrEmpty(e.DeletedBy));
+            builder.HasQueryFilter(u => u.DeletedAt == null && string.IsNullOrEmpty(u.DeletedBy));
         });
     }
 }

@@ -12,6 +12,26 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "CourseCategory",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseCategory", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Instructors",
                 columns: table => new
                 {
@@ -62,15 +82,43 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StudentOrInstructorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<int>(type: "int", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Courses",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DurationInHours = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    InstructorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -82,10 +130,45 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Courses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Courses_Instructors_InstructorId",
+                        name: "FK_Courses_CourseCategory_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "CourseCategory",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CourseSession",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    InstructorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseSession", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CourseSession_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CourseSession_Instructors_InstructorId",
                         column: x => x.InstructorId,
                         principalTable: "Instructors",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -94,7 +177,7 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
@@ -109,9 +192,9 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Enrollments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Enrollments_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
+                        name: "FK_Enrollments_CourseSession_SessionId",
+                        column: x => x.SessionId,
+                        principalTable: "CourseSession",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -127,7 +210,7 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Day = table.Column<int>(type: "int", nullable: false),
                     StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
@@ -142,22 +225,32 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Schedules", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Schedules_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
+                        name: "FK_Schedules_CourseSession_SessionId",
+                        column: x => x.SessionId,
+                        principalTable: "CourseSession",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_InstructorId",
+                name: "IX_Courses_CategoryId",
                 table: "Courses",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseSession_CourseId",
+                table: "CourseSession",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseSession_InstructorId",
+                table: "CourseSession",
                 column: "InstructorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_CourseId",
+                name: "IX_Enrollments_SessionId",
                 table: "Enrollments",
-                column: "CourseId");
+                column: "SessionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollments_StudentId",
@@ -165,9 +258,9 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Schedules_CourseId",
+                name: "IX_Schedules_SessionId",
                 table: "Schedules",
-                column: "CourseId");
+                column: "SessionId");
         }
 
         /// <inheritdoc />
@@ -180,13 +273,22 @@ namespace RCMS.Infrastructure.DataAccess.Migrations
                 name: "Schedules");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "Students");
+
+            migrationBuilder.DropTable(
+                name: "CourseSession");
 
             migrationBuilder.DropTable(
                 name: "Courses");
 
             migrationBuilder.DropTable(
                 name: "Instructors");
+
+            migrationBuilder.DropTable(
+                name: "CourseCategory");
         }
     }
 }
