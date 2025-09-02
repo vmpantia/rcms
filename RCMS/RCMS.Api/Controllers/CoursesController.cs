@@ -18,6 +18,6 @@ public class CoursesController(IMediator mediator) : BaseController(mediator)
     [HttpPost, Authorize(Roles = nameof(UserRole.Admin))]
     public async Task<IActionResult> CreateCourseAsync([FromBody] SaveCourseDto request) => await SendRequestAsync(new CreateCourseCommand(request));
     
-    [HttpGet("Categories"), Authorize(Roles = nameof(UserRole.Admin))]
-    public async Task<IActionResult> GetCourseCategoriesAsync() => await SendRequestAsync(new GetCourseCategoriesQuery());
+    [HttpPost("Categories/Filter"), Authorize(Roles = nameof(UserRole.Admin))]
+    public async Task<IActionResult> GetCourseCategoriesAsync([FromBody] FilterCourseCategory filter) => await SendRequestAsync(new GetCourseCategoriesQuery(filter));
 }

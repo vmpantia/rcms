@@ -21,12 +21,12 @@ public class CourseService(IHttpClientProvider httpClientProvider, ILogger<Cours
         }
     }
 
-    public async Task<IEnumerable<CourseCategoryDto>> GetCourseCategoriesAsync()
+    public async Task<IEnumerable<CourseCategoryDto>> GetCourseCategoriesAsync(FilterCourseCategory filter)
     {
         try
         {
             // Send getting of course categories request to API
-            var categories = await httpClientProvider.GetAsync<IEnumerable<CourseCategoryDto>>("https://localhost:7226/api/Courses/Categories");
+            var categories = await httpClientProvider.PostAsync<IEnumerable<CourseCategoryDto>>("https://localhost:7226/api/Courses/Categories/Filter", filter);
             return categories;
         }
         catch (Exception ex)

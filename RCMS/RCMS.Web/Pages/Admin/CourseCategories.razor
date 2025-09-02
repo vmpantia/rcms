@@ -37,6 +37,7 @@
     [Inject] public ICourseService CourseService { get; set; }
     [Inject] public ISnackbar Snackbar { get; set; }
     
+    private FilterCourseCategory _filter = new();
     private IEnumerable<CourseCategoryDto> _categories = new List<CourseCategoryDto>();
     private bool _isLoading = true;
 
@@ -45,7 +46,7 @@
         try
         {
             _isLoading = true;
-            _categories = await CourseService.GetCourseCategoriesAsync();
+            _categories = await CourseService.GetCourseCategoriesAsync(_filter);
         }
         catch (Exception ex)
         {

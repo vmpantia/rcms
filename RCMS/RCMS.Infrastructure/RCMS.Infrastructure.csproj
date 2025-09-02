@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\RCMS.Domain\RCMS.Domain.csproj" />
-      <ProjectReference Include="..\RCMS.Shared\RCMS.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

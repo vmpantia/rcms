@@ -1,3 +1,4 @@
+@using RCMS.Shared.Enumerations
 @using RCMS.Shared.Models.Courses
 @using RCMS.Web.Components.Forms
 @using RCMS.Web.Components.Controls
@@ -70,8 +71,10 @@
             _isLoading = true;
             _isInvalidData = false;
 
-            // Get course categories
-            _categories = await CourseService.GetCourseCategoriesAsync();
+            // Filter active course categories
+            _categories = await CourseService.GetCourseCategoriesAsync(
+                new FilterCourseCategory { Statuses = [nameof(CourseCategoryStatus.Active)] }
+            );
         }
         catch (Exception ex)
         {

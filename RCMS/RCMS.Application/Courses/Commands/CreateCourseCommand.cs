@@ -35,7 +35,7 @@ public sealed class CreateCourseCommandValidator : AbstractValidator<CreateCours
             {
                 // Check if the data already exists on the database
                 var result = await courseCategoryRepository.IsExistAsync(
-                    expression: cc => cc.Id == Guid.Parse(scd.CategoryId) && cc.Status == CourseCategoryStatus.Active,
+                    expression: cc => cc.Id == Guid.Parse(scd.CategoryId) && cc.Status != CourseCategoryStatus.Active,
                     cancellationToken: ct);
                 return !result;
             })
