@@ -1,4 +1,5 @@
 @using System.Linq.Expressions
+@using RCMS.Web.Models
 
 @typeparam T
 
@@ -7,7 +8,7 @@
            HelperText="@HelperText" Clearable="true">
     @foreach (var option in Options)
     {
-        <MudSelectItem Value="option">@option</MudSelectItem>
+        <MudSelectItem Value="option.Value">@option.Display</MudSelectItem>
     }
 </MudSelect>
 
@@ -20,6 +21,6 @@
     [Parameter] public Expression<Func<T>> For { get; set; }
     [Parameter] public bool IsDisabled { get; set; }
     [Parameter] public string HelperText { get; set; }
-    [Parameter] public IEnumerable<T> Options { get; set; }
+    [Parameter] public IEnumerable<SelectFieldOption> Options { get; set; }
     
 }

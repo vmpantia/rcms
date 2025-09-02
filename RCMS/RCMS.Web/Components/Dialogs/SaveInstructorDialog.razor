@@ -4,6 +4,7 @@
 @using RCMS.Web.Components.Controls
 @using RCMS.Web.Interfaces.Helpers
 @using RCMS.Web.Interfaces.Services
+@using RCMS.Web.Models
 
 <MudDialog>
     <DialogContent>
@@ -71,7 +72,7 @@
                                      @bind-Value="_instructor.Gender"
                                      For="@(() => _instructor.Gender)"
                                      IsDisabled="IsFormDisabled"
-                                     Options="@(Enum.GetValues<GenderType>().Select(gt => gt.ToString()))"/>
+                                     Options="@(Enum.GetValues<GenderType>().Select(gt => new SelectFieldOption(gt.ToString())))"/>
                     </MudItem>
                     <MudItem xs="4">
                         <DateTimeField Label="Birthdate"

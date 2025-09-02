@@ -1,6 +1,8 @@
 @using RCMS.Shared.Models.Courses
 @using RCMS.Web.Components.Forms
 @using RCMS.Web.Components.Controls
+@using RCMS.Web.Interfaces.Services
+@using RCMS.Web.Models
 
 <MudDialog>
     <DialogContent>
@@ -14,7 +16,21 @@
                                IsDisabled="IsFormDisabled"/>
                 </MudItem>
                 <MudItem xs="12">
+                    <SelectField Label="Category"
+                                 @bind-Value="_course.CategoryId"
+                                 For="@(() => _course.CategoryId)"
+                                 IsDisabled="IsFormDisabled"
+                                 Options="@_categories.Select(ccd => new SelectFieldOption(ccd.Id.ToString(), ccd.Name))"/>
+                </MudItem>
+                <MudItem xs="12">
                     <TextEditor Label="Description"/>
+                </MudItem>
+                <MudItem Class="mt-2" xs="12">
+                    <Button Type="ButtonType.Submit" 
+                            IsDisabled="IsFormDisabled" 
+                            IsLoading="_isSubmitting" 
+                            Text="Submit"
+                            LoadingText="Submitting"></Button>
                 </MudItem>
             </FieldContent>
         </InputForm>
@@ -23,14 +39,38 @@
 
 @code {
     
+    [Inject] public ICourseService CourseService { get; set; }
+    
     [Parameter] public Guid? CourseId { get; set; }
 
     private bool IsFormDisabled => _isSubmitting || _isInvalidData;
     
     private SaveCourseDto _course = new();
+    private IEnumerable<CourseCategoryDto> _categories = new List<CourseCategoryDto>();
     private string _errorMessage;
     private bool _isLoading;
     private bool _isSubmitting;
     private bool _isInvalidData;
-    
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _isLoading = true;
+            _isInvalidData = false;
+
+            // Get course categories
+            _categories = await CourseService.GetCourseCategoriesAsync();
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+            _isInvalidData = true;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
 }
