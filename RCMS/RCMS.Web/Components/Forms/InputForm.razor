@@ -1,0 +1,36 @@
+@using RCMS.Web.Components.Validations
+
+@typeparam TData
+
+<EditForm Model="Data" OnValidSubmit="OnSubmitButtonClick">
+    <FluentValidationValidator T="TData" />
+    <MudGrid Class="mb-5">
+        @if (IsLoading && LoadingContent is not null)
+        {
+            @LoadingContent
+        }
+        else
+        {
+            if (HasError)
+            {
+                <MudItem xs="12">
+                    <MudAlert Severity="Severity.Error">
+                        @((MarkupString)ErrorMessage)
+                    </MudAlert>
+                </MudItem>
+            }
+            @FieldContent
+        }
+    </MudGrid>
+</EditForm>
+
+@code {
+    [Parameter] public TData Data { get; set; }
+    [Parameter] public string ErrorMessage { get; set; }
+    [Parameter] public bool IsLoading { get; set; }
+    [Parameter] public EventCallback<EditContext> OnSubmitButtonClick { get; set; }
+    [Parameter] public RenderFragment? LoadingContent { get; set; }
+    [Parameter] public RenderFragment FieldContent { get; set; }
+    
+    private bool HasError => !string.IsNullOrEmpty(ErrorMessage);
+}

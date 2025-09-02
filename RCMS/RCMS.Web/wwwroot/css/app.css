@@ -112,3 +112,12 @@ code {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+.ql-container {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.ql-toolbar {
+    border: none !important;
+}

@@ -1,0 +1,22 @@
+@using RCMS.Shared.Models.Courses
+@using RCMS.Web.Components.Forms
+@using RCMS.Web.Components.Controls
+
+<MudDialog>
+    <DialogContent>
+        <InputForm TData="SaveCourseDto"
+                   Data="_course">
+            <FieldContent>
+                <TextEditor Label="Description" />
+            </FieldContent>
+        </InputForm>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    
+    [Parameter] public Guid? CourseId { get; set; }
+
+    private SaveCourseDto _course = new();
+    
+}

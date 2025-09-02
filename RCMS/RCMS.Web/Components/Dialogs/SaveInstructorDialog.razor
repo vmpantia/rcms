@@ -1,0 +1,209 @@
+@using RCMS.Shared.Enumerations
+@using RCMS.Shared.Models.Instructors
+@using RCMS.Web.Components.Forms
+@using RCMS.Web.Components.Controls
+@using RCMS.Web.Interfaces.Helpers
+@using RCMS.Web.Interfaces.Services
+
+<MudDialog>
+    <DialogContent>
+        <InputForm TData="SaveInstructorDto"
+                   Data="@_instructor"
+                   ErrorMessage="@_errorMessage"
+                   IsLoading="_isLoading"
+                   OnSubmitButtonClick="SaveInstructorAsync">
+            <LoadingContent>
+                <MudItem xs="12">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="4">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="4">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="4">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="4">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="4">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem Class="mt-2" xs="12">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+            </LoadingContent>
+            <FieldContent>
+                <MudItem xs="12">
+                        <MudText Typo="Typo.button">Personal Information</MudText>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <TextField Label="First Name"
+                                   @bind-Value="_instructor.FirstName"
+                                   For="@(() => _instructor.FirstName)"
+                                   IsDisabled="IsFormDisabled"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <TextField Label="Middle Name"
+                                   @bind-Value="_instructor.MiddleName"
+                                   For="@(() => _instructor.MiddleName)"
+                                   IsDisabled="IsFormDisabled"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <TextField Label="Last Name"
+                                   @bind-Value="_instructor.LastName"
+                                   For="@(() => _instructor.LastName)"
+                                   IsDisabled="IsFormDisabled"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <SelectField Label="Gender"
+                                     @bind-Value="_instructor.Gender"
+                                     For="@(() => _instructor.Gender)"
+                                     IsDisabled="IsFormDisabled"
+                                     Options="@(Enum.GetValues<GenderType>().Select(gt => gt.ToString()))"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <DateTimeField Label="Birthdate"
+                                       @bind-Date="_instructor.BirthDate"
+                                       For="@(() => _instructor.BirthDate)"
+                                       IsDisabled="IsFormDisabled"/>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.button">Contact Information</MudText>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <TextField Label="Phone Number"
+                                   @bind-Value="_instructor.PhoneNumber"
+                                   For="@(() => _instructor.PhoneNumber)"
+                                   IsDisabled="IsFormDisabled"/>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <TextField Label="Email Address"
+                                   @bind-Value="_instructor.EmailAddress"
+                                   For="@(() => _instructor.EmailAddress)"
+                                   IsDisabled="IsFormDisabled"/>
+                    </MudItem>
+                    <MudItem Class="mt-2" xs="12">
+                        <Button Type="ButtonType.Submit" 
+                                IsDisabled="IsFormDisabled" 
+                                IsLoading="_isSubmitting" 
+                                Text="Submit"
+                                LoadingText="Submitting"></Button>
+                    </MudItem>
+            </FieldContent>
+        </InputForm>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    
+    [Inject] public IInstructorService InstructorService { get; set; }
+    [Inject] public IDialogHelper DialogHelper { get; set; }
+    [Inject] public ISnackbar Snackbar { get; set; }
+    
+    [CascadingParameter] public IMudDialogInstance MudDialog { get; set; }
+    [Parameter] public Guid? InstructorId { get; set; }
+
+    private bool IsFormDisabled => _isSubmitting || _isInvalidData;
+    
+    private SaveInstructorDto _instructor = new();
+    private string _errorMessage;
+    private bool _isLoading;
+    private bool _isSubmitting;
+    private bool _isInvalidData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (InstructorId.HasValue) 
+            await LoadInstructorForUpdateAsync();
+    }
+
+    private async Task LoadInstructorForUpdateAsync()
+    {
+        try
+        {
+            _isLoading = true;
+            _isInvalidData = false;
+            
+            // Get instructor to update
+            var instructor = await InstructorService.GetInstructorByIdAsync((Guid)InstructorId!);
+
+            // Map instructor to a instructor update model
+            _instructor = new SaveInstructorDto
+            {
+                FirstName = instructor.FirstName,
+                MiddleName = instructor.MiddleName,
+                LastName = instructor.LastName,
+                Gender = instructor.Gender.ToString(),
+                BirthDate = instructor.BirthDate,
+                PhoneNumber = instructor.PhoneNumber,
+                EmailAddress = instructor.EmailAddress,
+            };
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+            _isInvalidData = true;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+    
+    private async Task SaveInstructorAsync()
+    {
+        if (InstructorId.HasValue)
+        {
+            await HandleInstructorActionAsync("Confirm Update", 
+                "Are you sure you want to update this instructor?", 
+                () => InstructorService.UpdateInstructorAsync((Guid)InstructorId!, _instructor), 
+                "Instructor updated successfully.");
+        }
+        else
+        {
+            await HandleInstructorActionAsync("Confirm Creation", 
+                "Are you sure you want to create this instructor?", 
+                () => InstructorService.CreateInstructorAsync(_instructor), 
+                "Instructor created successfully.");
+        }
+    }
+    
+    private async Task HandleInstructorActionAsync(string confirmTitle, string confirmMessage, Func<Task> action, string successMessage)
+    {
+        try
+        {
+            var isConfirmed = await DialogHelper.ShowMessageDialogAsync(confirmTitle, confirmMessage);
+            if (!isConfirmed) return;
+
+            StateHasChanged();
+            _errorMessage = string.Empty;
+            _isSubmitting = true;
+
+            await action.Invoke();
+
+            Snackbar.Add(successMessage, Severity.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+    
+}

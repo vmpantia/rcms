@@ -1,0 +1,45 @@
+@using Blazored.TextEditor
+
+<MudField Label="@Label" Disabled="@IsDisabled" 
+          Variant="Variant.Outlined" Margin="Margin.Dense" 
+          HelperText="@HelperText">
+    <BlazoredTextEditor @ref="_editor" Theme="snow" Placeholder="Start typing...">
+        <ToolbarContent>
+            <select class="ql-header">
+                <option selected=""></option>
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3"></option>
+                <option value="4"></option>
+                <option value="5"></option>
+            </select>
+            <span class="ql-formats">
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+                <button class="ql-strike"></button>
+            </span>
+            <span class="ql-formats">
+                <select class="ql-color"></select>
+                <select class="ql-background"></select>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-link"></button>
+            </span>
+        </ToolbarContent>
+    </BlazoredTextEditor>
+</MudField>
+
+@code {
+    
+    [Parameter] public string Label { get; set; }
+    [Parameter] public bool IsDisabled { get; set; }
+    [Parameter] public string HelperText { get; set; }
+    
+    private BlazoredTextEditor _editor;
+    
+}

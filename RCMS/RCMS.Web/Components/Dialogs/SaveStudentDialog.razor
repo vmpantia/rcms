@@ -1,0 +1,208 @@
+@using RCMS.Shared.Enumerations
+@using RCMS.Shared.Models.Students
+@using RCMS.Web.Components.Forms
+@using RCMS.Web.Components.Controls
+@using RCMS.Web.Interfaces.Helpers
+@using RCMS.Web.Interfaces.Services
+
+<MudDialog>
+    <DialogContent>
+        <InputForm TData="SaveStudentDto"
+                   Data="_student"
+                   ErrorMessage="@_errorMessage"
+                   IsLoading="_isLoading"
+                   OnSubmitButtonClick="SaveStudentAsync">
+            <LoadingContent>
+                <MudItem xs="12">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="4">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="4">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="4">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="4">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="4">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+                <MudItem Class="mt-2" xs="12">
+                    <MudSkeleton Height="30px" />
+                </MudItem>
+            </LoadingContent>
+            <FieldContent>
+                <MudItem xs="12">
+                        <MudText Typo="Typo.button">Personal Information</MudText>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <TextField Label="First Name"
+                                   @bind-Value="_student.FirstName"
+                                   For="@(() => _student.FirstName)"
+                                   IsDisabled="IsFormDisabled"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <TextField Label="Middle Name"
+                                   @bind-Value="_student.MiddleName"
+                                   For="@(() => _student.MiddleName)"
+                                   IsDisabled="IsFormDisabled"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <TextField Label="Last Name"
+                                   @bind-Value="_student.LastName"
+                                   For="@(() => _student.LastName)"
+                                   IsDisabled="IsFormDisabled"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <SelectField Label="Gender"
+                                     @bind-Value="_student.Gender"
+                                     For="@(() => _student.Gender)"
+                                     IsDisabled="IsFormDisabled"
+                                     Options="@(Enum.GetValues<GenderType>().Select(gt => gt.ToString()))"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <DateTimeField Label="Birthdate"
+                                       @bind-Date="_student.BirthDate"
+                                       For="@(() => _student.BirthDate)"
+                                       IsDisabled="IsFormDisabled"/>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.button">Contact Information</MudText>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <TextField Label="Phone Number"
+                                   @bind-Value="_student.PhoneNumber"
+                                   For="@(() => _student.PhoneNumber)"
+                                   IsDisabled="IsFormDisabled"/>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <TextField Label="Email Address"
+                                   @bind-Value="_student.EmailAddress"
+                                   For="@(() => _student.EmailAddress)"
+                                   IsDisabled="IsFormDisabled"/>
+                    </MudItem>
+                    <MudItem Class="mt-2" xs="12">
+                        <Button Type="ButtonType.Submit" 
+                                IsDisabled="IsFormDisabled" 
+                                IsLoading="_isSubmitting" 
+                                Text="Submit"
+                                LoadingText="Submitting"></Button>
+                    </MudItem>
+            </FieldContent>
+        </InputForm>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [Inject] public IStudentService StudentService { get; set; }
+    [Inject] public IDialogHelper DialogHelper { get; set; }
+    [Inject] public ISnackbar Snackbar { get; set; }
+    
+    [CascadingParameter] public IMudDialogInstance MudDialog { get; set; }
+    [Parameter] public Guid? StudentId { get; set; }
+
+    private bool IsFormDisabled => _isSubmitting || _isInvalidData;
+    
+    private SaveStudentDto _student = new();
+    private string _errorMessage;
+    private bool _isLoading;
+    private bool _isSubmitting;
+    private bool _isInvalidData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (StudentId.HasValue) 
+            await LoadStudentForUpdateAsync();
+    }
+
+    private async Task LoadStudentForUpdateAsync()
+    {
+        try
+        {
+            _isLoading = true;
+            _isInvalidData = false;
+            
+            // Get student to update
+            var student = await StudentService.GetStudentByIdAsync((Guid)StudentId!);
+
+            // Map student to a student update model
+            _student = new SaveStudentDto
+            {
+                FirstName = student.FirstName,
+                MiddleName = student.MiddleName,
+                LastName = student.LastName,
+                Gender = student.Gender.ToString(),
+                BirthDate = student.BirthDate,
+                PhoneNumber = student.PhoneNumber,
+                EmailAddress = student.EmailAddress,
+            };
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+            _isInvalidData = true;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task SaveStudentAsync()
+    {
+        if (StudentId.HasValue)
+        {
+            await HandleStudentActionAsync("Confirm Update", 
+                "Are you sure you want to update this student?", 
+                () => StudentService.UpdateStudentAsync((Guid)StudentId!, _student), 
+                "Student updated successfully.");
+        }
+        else
+        {
+            await HandleStudentActionAsync("Confirm Creation", 
+                "Are you sure you want to create this student?", 
+                () => StudentService.CreateStudentAsync(_student), 
+                "Student created successfully.");
+        }
+    }
+    
+    private async Task HandleStudentActionAsync(string confirmTitle, string confirmMessage, Func<Task> action, string successMessage)
+    {
+        try
+        {
+            var isConfirmed = await DialogHelper.ShowMessageDialogAsync(confirmTitle, confirmMessage);
+            if (!isConfirmed) return;
+
+            StateHasChanged();
+            _errorMessage = string.Empty;
+            _isSubmitting = true;
+
+            await action.Invoke();
+
+            Snackbar.Add(successMessage, Severity.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+
+}

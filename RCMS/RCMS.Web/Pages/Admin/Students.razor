@@ -23,7 +23,7 @@
                     <Toolbar>
                         <IconButton Icon="@Icons.Material.Filled.PersonAdd"
                                     Text="Create Student"
-                                    OnButtonClick="OpenCreateStudentDialogAsync"/>
+                                    OnButtonClick="() => OpenSaveStudentDialog()"/>
                         <IconButton Icon="@Icons.Material.Filled.Delete"
                                     Text="Delete Student(s)"
                                     IsDisabled="@(!_selectedStudents.Any())"
@@ -42,7 +42,7 @@
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn TData="StudentLiteDto" Title="Action">
                             <MudMenu Icon="@Icons.Material.Filled.MoreHoriz">
-                                <MudMenuItem Label="Edit" OnClick="() => OpenUpdateStudentDialogAsync(context)"/>
+                                <MudMenuItem Label="Edit" OnClick="() => OpenSaveStudentDialog(context)"/>
                                 <MudMenuItem Label="Delete" OnClick="() => DeleteStudentAsync(context)"/>
                             </MudMenu>
                         </DataGridTemplateColumn>
@@ -80,24 +80,15 @@
             _isLoading = false;
         }
     }
-
-    private async Task OpenCreateStudentDialogAsync()
-    {
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        await OpenCreateOrUpdateStudentDialog<CreateStudentDialog>("Create Student", new DialogParameters(), options);
-    } 
-
-    private async Task OpenUpdateStudentDialogAsync(StudentLiteDto dto)
-    {
-        var parameters = new DialogParameters<UpdateStudentDialog> { { usd => usd.StudentId, dto.Id } };
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        await OpenCreateOrUpdateStudentDialog<UpdateStudentDialog>("Update Student", parameters, options);
-    } 
  
-    private async Task OpenCreateOrUpdateStudentDialog<TDialog>(string title, DialogParameters parameters, DialogOptions options) where TDialog : IComponent
+    private async Task OpenSaveStudentDialog(StudentLiteDto? dto = null)
     {
+        var title = dto is null ? "Create Student" : "Update Student";
+        var parameters = new DialogParameters<SaveStudentDialog> { { ssd => ssd.StudentId, dto?.Id } };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        
         // Handle dialog result
-        var result = await DialogHelper.ShowDialogAsync<TDialog>(title, parameters, options);
+        var result = await DialogHelper.ShowDialogAsync<SaveStudentDialog>(title, parameters, options);
         if (result)
         {
             StateHasChanged();

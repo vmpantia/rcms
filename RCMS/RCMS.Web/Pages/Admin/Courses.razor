@@ -4,6 +4,9 @@
 @using RCMS.Web.Components.Tables
 @using RCMS.Web.Components.Texts
 @using RCMS.Web.Components.Chips
+@using RCMS.Web.Components.Controls
+@using RCMS.Web.Components.Dialogs
+@using RCMS.Web.Interfaces.Helpers
 
 <PageContent Title="Courses" Description="List of courses stored on our database.">
     <ChildComponent>
@@ -11,6 +14,11 @@
             <MudItem xs="12">
                 <DataGrid Items="_courses"
                           IsLoading="_isLoading">
+                    <Toolbar>
+                        <IconButton Icon="@Icons.Material.Filled.PersonAdd"
+                                    Text="Create Course"
+                                    OnButtonClick="() => OpenSaveCourseDialogAsync()"/>
+                    </Toolbar>
                     <Columns>
                         <DataGridPropertyColumn TData="CourseDto" Title="Name" Property="cc => cc.Name"/>
                         <DataGridPropertyColumn TData="CourseDto" Title="Description" Property="cc => cc.Description"/>
@@ -34,6 +42,7 @@
     
     [Inject] public ICourseService CourseService { get; set; }
     [Inject] public ISnackbar Snackbar { get; set; }
+    [Inject] public IDialogHelper DialogHelper { get; set; }
 
     private IEnumerable<CourseDto> _courses = new List<CourseDto>();
     private bool _isLoading = true;
@@ -54,5 +63,20 @@
             _isLoading = false;
         }
     }
+
+    private async Task OpenSaveCourseDialogAsync(CourseDto? dto = null)
+    {
+        var title = dto is null ? "Create Course" : "Update Course";
+        var parameters = new DialogParameters<SaveCourseDialog> { { svd => svd.CourseId, dto?.Id } };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        
+        // Handle dialog result
+        var result = await DialogHelper.ShowDialogAsync<SaveCourseDialog>(title, parameters, options);
+        if (result)
+        {
+            StateHasChanged();
+            await OnInitializedAsync();
+        }
+    } 
 
 }

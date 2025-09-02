@@ -23,7 +23,7 @@
                     <Toolbar>
                         <IconButton Icon="@Icons.Material.Filled.PersonAdd"
                                     Text="Create Instructor"
-                                    OnButtonClick="OpenCreateInstructorDialogAsync"/>
+                                    OnButtonClick="() => OpenSaveInstructorDialog()"/>
                         <IconButton Icon="@Icons.Material.Filled.Delete"
                                     Text="Delete Instructor(s)"
                                     IsDisabled="@(!_selectedInstructors.Any())"
@@ -42,7 +42,7 @@
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn TData="InstructorLiteDto" Title="Action">
                             <MudMenu Icon="@Icons.Material.Filled.MoreHoriz">
-                                <MudMenuItem Label="Edit" OnClick="() => OpenUpdateInstructorDialogAsync(context)"/>
+                                <MudMenuItem Label="Edit" OnClick="() => OpenSaveInstructorDialog(context)"/>
                                 <MudMenuItem Label="Delete" OnClick="() => DeleteInstructorAsync(context)"/>
                             </MudMenu>
                         </DataGridTemplateColumn>
@@ -80,24 +80,15 @@
             _isLoading = false;
         }
     }
-
-    private async Task OpenCreateInstructorDialogAsync()
-    {
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        await OpenCreateOrUpdateInstructorDialog<CreateInstructorDialog>("Create Instructor", new DialogParameters(), options);
-    } 
-
-    private async Task OpenUpdateInstructorDialogAsync(InstructorLiteDto dto)
-    {
-        var parameters = new DialogParameters<UpdateInstructorDialog> { { usd => usd.InstructorId, dto.Id } };
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        await OpenCreateOrUpdateInstructorDialog<UpdateInstructorDialog>("Update Instructor", parameters, options);
-    } 
  
-    private async Task OpenCreateOrUpdateInstructorDialog<TDialog>(string title, DialogParameters parameters, DialogOptions options) where TDialog : IComponent
+    private async Task OpenSaveInstructorDialog(InstructorLiteDto? dto = null)
     {
+        var title = dto is null ? "Create Instructor" : "Update Instructor";
+        var parameters = new DialogParameters<SaveInstructorDialog> { { sid => sid.InstructorId, dto?.Id } };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        
         // Handle dialog result
-        var result = await DialogHelper.ShowDialogAsync<TDialog>(title, parameters, options);
+        var result = await DialogHelper.ShowDialogAsync<SaveInstructorDialog>(title, parameters, options);
         if (result)
         {
             StateHasChanged();
