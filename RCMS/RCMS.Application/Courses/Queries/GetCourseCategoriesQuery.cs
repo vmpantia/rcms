@@ -15,10 +15,8 @@ public sealed class GetCourseCategoriesQueryHandler(ICourseCategoryRepository co
     {
         // Get data stored on the database
         var data = await courseCategoryRepository.Get()
-            .Include(tbl => tbl.Courses)
             .OrderByDescending(cc => cc.CreatedAt)
             .AsNoTracking()
-            .AsSplitQuery()
             .ToListAsync(cancellationToken);
         
         // Map data to dto objects

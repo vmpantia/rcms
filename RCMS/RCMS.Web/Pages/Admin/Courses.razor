@@ -1,27 +1,24 @@
-@page "/courses/categories"
-@using Microsoft.AspNetCore.Authorization
-@using RCMS.Shared.Enumerations
+@page "/courses"
 @using RCMS.Shared.Models.Courses
 @using RCMS.Web.Interfaces.Services
 @using RCMS.Web.Components.Tables
 @using RCMS.Web.Components.Texts
 @using RCMS.Web.Components.Chips
 
-@attribute [Authorize(Roles = nameof(UserRole.Admin))]
-
-<PageContent Title="Categories" Description="List of categories stored on our database.">
+<PageContent Title="Courses" Description="List of courses stored on our database.">
     <ChildComponent>
         <MudGrid>
             <MudItem xs="12">
-                <DataGrid Items="_categories"
+                <DataGrid Items="_courses"
                           IsLoading="_isLoading">
                     <Columns>
-                        <DataGridPropertyColumn TData="CourseCategoryDto" Title="Name" Property="cc => cc.Name"/>
-                        <DataGridPropertyColumn TData="CourseCategoryDto" Title="Description" Property="cc => cc.Description"/>
-                        <DataGridTemplateColumn TData="CourseCategoryDto" Title="Status" IsSortable="true" SortBy="cc => cc.Status">
-                            <CourseCategoryStatusChip Status="@context.Status"/>
+                        <DataGridPropertyColumn TData="CourseDto" Title="Name" Property="cc => cc.Name"/>
+                        <DataGridPropertyColumn TData="CourseDto" Title="Description" Property="cc => cc.Description"/>
+                        <DataGridPropertyColumn TData="CourseDto" Title="Category" Property="cc => cc.Category.Name"/>
+                        <DataGridTemplateColumn TData="CourseDto" Title="Status" IsSortable="true" SortBy="cc => cc.Status">
+                            <CourseStatusChip Status="@context.Status"/>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn TData="CourseCategoryDto" Title="Last Modified" IsSortable="true" SortBy="cc => cc.LastModifiedAt">
+                        <DataGridTemplateColumn TData="CourseDto" Title="Last Modified" IsSortable="true" SortBy="cc => cc.LastModifiedAt">
                             <DateTimeText Value="@context.LastModifiedAt"
                                           SecondaryText="@context.LastModifiedBy"/>
                         </DataGridTemplateColumn>
@@ -32,20 +29,21 @@
     </ChildComponent>
 </PageContent>
 
+
 @code {
     
     [Inject] public ICourseService CourseService { get; set; }
     [Inject] public ISnackbar Snackbar { get; set; }
-    
-    private IEnumerable<CourseCategoryDto> _categories = new List<CourseCategoryDto>();
-    private bool _isLoading = true;
 
+    private IEnumerable<CourseDto> _courses = new List<CourseDto>();
+    private bool _isLoading = true;
+    
     protected override async Task OnInitializedAsync()
     {
         try
         {
             _isLoading = true;
-            _categories = await CourseService.GetCourseCategoriesAsync();
+            _courses = await CourseService.GetCoursesAsync();
         }
         catch (Exception ex)
         {

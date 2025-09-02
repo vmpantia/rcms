@@ -4,4 +4,4 @@ using RCMS.Infrastructure.DataAccess.Contexts;
 
 namespace RCMS.Infrastructure.DataAccess.Repositories;
 
-public sealed class UserRepository(RCMSDbContext context) : BaseRepository<User>(context), IUserRepository;
+public sealed class CourseRepository(RCMSDbContext context) : BaseRepository<Course>(context), ICourseRepository;

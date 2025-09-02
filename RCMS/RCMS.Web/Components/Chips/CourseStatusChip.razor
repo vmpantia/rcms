@@ -1,0 +1,19 @@
+@using RCMS.Shared.Enumerations
+
+<MudChip T="string" Variant="Variant.Filled" Label="true" Color="@Color" Size="Size.Small">
+    @Status.ToString()
+</MudChip>
+
+@code {
+    [Parameter] public CourseStatus Status { get; set; }
+
+    private Color Color => Status switch
+    {
+        CourseStatus.Draft => Color.Default,
+        CourseStatus.Published => Color.Primary,
+        CourseStatus.Ongoing => Color.Info,
+        CourseStatus.Completed => Color.Success,
+        CourseStatus.Cancelled or CourseStatus.Archived => Color.Dark,
+        _ => Color.Default,
+    };
+}

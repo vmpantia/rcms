@@ -10,6 +10,9 @@ namespace RCMS.Api.Controllers;
 [Route("api/[controller]")]
 public class CoursesController(IMediator mediator) : BaseController(mediator)
 {
+    [HttpGet, Authorize(Roles = nameof(UserRole.Admin))]
+    public async Task<IActionResult> GetCoursesAsync() => await SendRequestAsync(new GetCoursesQuery());
+    
     [HttpGet("Categories"), Authorize(Roles = nameof(UserRole.Admin))]
     public async Task<IActionResult> GetCourseCategoriesAsync() => await SendRequestAsync(new GetCourseCategoriesQuery());
 }

@@ -6,6 +6,21 @@ namespace RCMS.Web.Services;
 
 public class CourseService(IHttpClientProvider httpClientProvider, ILogger<CourseService> logger) : ICourseService
 {
+    public async Task<IEnumerable<CourseDto>> GetCoursesAsync()
+    {
+        try
+        {
+            // Send getting of courses request to API
+            var courses = await httpClientProvider.GetAsync<IEnumerable<CourseDto>>("https://localhost:7226/api/Courses");
+            return courses;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError($"Error in getting courses. | {ex.Message}");
+            throw;
+        }
+    }
+
     public async Task<IEnumerable<CourseCategoryDto>> GetCourseCategoriesAsync()
     {
         try

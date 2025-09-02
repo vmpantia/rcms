@@ -9,4 +9,5 @@ public class StudentDto : StudentLiteDto
     public string MiddleName { get; set; }
     public GenderType Gender { get; set; }
     public DateTime BirthDate { get; set; }
+    public int NoOfOngoingEnrollments { get; set; }
 }

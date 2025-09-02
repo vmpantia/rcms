@@ -9,7 +9,6 @@ public class CourseProfile : Profile
     public CourseProfile()
     {
         CreateMap<CourseCategory, CourseCategoryDto>()
-            .ForMember(dst => dst.NoOfCourses, opt => opt.MapFrom(src => src.Courses.Count))
             .ForMember(dst => dst.LastModifiedAt, opt => opt.MapFrom(src => src.ModifiedAt ?? src.CreatedAt))
             .ForMember(dst => dst.LastModifiedBy, opt => opt.MapFrom(src => src.ModifiedBy ?? src.CreatedBy));
     }

@@ -10,7 +10,6 @@ public class StudentLiteDto
     public string PhoneNumber { get; set; }
     public string EmailAddress { get; set; }
     public StudentStatus Status { get; set; }
-    public int NoOfOngoingEnrollments { get; set; }
     public DateTime LastModifiedAt { get; set; }
     public string LastModifiedBy { get; set; }
 }
