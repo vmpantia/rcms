@@ -21,7 +21,9 @@
                     </Toolbar>
                     <Columns>
                         <DataGridPropertyColumn TData="CourseDto" Title="Name" Property="cc => cc.Name"/>
-                        <DataGridPropertyColumn TData="CourseDto" Title="Description" Property="cc => cc.Description"/>
+                        <DataGridTemplateColumn TData="CourseDto" Title="Description">
+                            @((MarkupString)(string.IsNullOrWhiteSpace(context.Description) ? "-" : context.Description))
+                        </DataGridTemplateColumn>
                         <DataGridPropertyColumn TData="CourseDto" Title="Category" Property="cc => cc.Category.Name"/>
                         <DataGridTemplateColumn TData="CourseDto" Title="Status" IsSortable="true" SortBy="cc => cc.Status">
                             <CourseStatusChip Status="@context.Status"/>

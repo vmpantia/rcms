@@ -3,7 +3,10 @@
 <MudField Label="@Label" Disabled="@IsDisabled" 
           Variant="Variant.Outlined" Margin="Margin.Dense" 
           HelperText="@HelperText">
-    <BlazoredTextEditor @ref="_editor" Theme="snow" Placeholder="Start typing...">
+    <BlazoredTextEditor @ref="_editor" 
+                        Theme="snow" 
+                        Placeholder="Start typing..." 
+                        ReadOnly="IsDisabled">
         <ToolbarContent>
             <select class="ql-header">
                 <option selected=""></option>
@@ -42,4 +45,8 @@
     
     private BlazoredTextEditor _editor;
     
+    public async Task<string> GetEditorContentAsync()
+    {
+        return await _editor.GetHTML();
+    }
 }

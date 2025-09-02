@@ -27,7 +27,9 @@
                                  Options="@_categories.Select(ccd => new SelectFieldOption(ccd.Id.ToString(), ccd.Name))"/>
                 </MudItem>
                 <MudItem xs="12">
-                    <TextEditor Label="Description"/>
+                    <TextEditor @ref="_textEditor"
+                                Label="Description" 
+                                IsDisabled="IsFormDisabled"/>
                 </MudItem>
                 <MudItem Class="mt-2" xs="12">
                     <Button Type="ButtonType.Submit" 
@@ -52,7 +54,8 @@
     [Parameter] public Guid? CourseId { get; set; }
 
     private bool IsFormDisabled => _isSubmitting || _isInvalidData;
-    
+
+    private TextEditor _textEditor;
     private SaveCourseDto _course = new();
     private IEnumerable<CourseCategoryDto> _categories = new List<CourseCategoryDto>();
     private string _errorMessage;
@@ -83,6 +86,9 @@
 
     private async Task SaveCourseAsync()
     {
+        // Get and set description from HTML content
+        _course.Description = await _textEditor.GetEditorContentAsync();
+        
         if (CourseId.HasValue)
         {
             await HandleCourseActionAsync("Confirm Creation", 
