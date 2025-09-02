@@ -6,6 +6,7 @@
 @using RCMS.Web.Components.Tables
 @using RCMS.Web.Components.Texts
 @using RCMS.Web.Components.Chips
+@using RCMS.Web.Components.Controls
 
 @attribute [Authorize(Roles = nameof(UserRole.Admin))]
 
@@ -15,6 +16,11 @@
             <MudItem xs="12">
                 <DataGrid Items="_categories"
                           IsLoading="_isLoading">
+                    <Toolbar>
+                        <MudSpacer />
+                        <IconButton Icon="@Icons.Material.Filled.FilterAlt"
+                                    Text="Filter Categories" />
+                    </Toolbar>
                     <Columns>
                         <DataGridPropertyColumn TData="CourseCategoryDto" Title="Name" Property="cc => cc.Name"/>
                         <DataGridPropertyColumn TData="CourseCategoryDto" Title="Description" Property="cc => cc.Description"/>
