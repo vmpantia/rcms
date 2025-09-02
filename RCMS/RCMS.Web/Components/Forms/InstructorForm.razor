@@ -3,10 +3,8 @@
 @using RCMS.Web.Components.Validations
 @using RCMS.Web.Components.Controls
 
-@typeparam TInstructor where TInstructor : SaveInstructorDto
-
 <EditForm Model="Instructor" OnValidSubmit="OnSubmitButtonClick">
-    <FluentValidationValidator T="TInstructor" />
+    <FluentValidationValidator T="SaveInstructorDto" />
     <MudGrid Class="mb-5">
         @if (IsLoading)
         {
@@ -112,7 +110,7 @@
 </EditForm>
 
 @code {
-    [Parameter] public TInstructor Instructor { get; set; }
+    [Parameter] public SaveInstructorDto Instructor { get; set; }
     [Parameter] public string ErrorMessage { get; set; }
     [Parameter] public bool IsLoading { get; set; }
     [Parameter] public bool IsSubmitting { get; set; }

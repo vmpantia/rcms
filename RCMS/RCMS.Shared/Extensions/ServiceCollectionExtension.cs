@@ -13,11 +13,5 @@ public static class ServiceCollectionExtension
     {
         // Auto registration from assembly
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        
-        // Manual registration for using base validator
-        services.AddScoped<IValidator<CreateStudentDto>, CreateStudentValidator>();
-        services.AddScoped<IValidator<UpdateStudentDto>, UpdateStudentValidator>();
-        services.AddScoped<IValidator<CreateInstructorDto>, CreateInstructorValidator>();
-        services.AddScoped<IValidator<UpdateInstructorDto>, UpdateInstructorValidator>();
     }
 }

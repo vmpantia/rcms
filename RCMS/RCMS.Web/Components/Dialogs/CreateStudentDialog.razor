@@ -5,8 +5,7 @@
 
 <MudDialog>
     <DialogContent>
-        <StudentForm TStudent="CreateStudentDto"
-                     Student="@_student" 
+        <StudentForm Student="@_student" 
                      ErrorMessage="@_errorMessage"
                      IsSubmitting="_isCreating"
                      OnSubmitButtonClick="CreateStudentAsync"/>
@@ -20,7 +19,7 @@
 
     [CascadingParameter] public IMudDialogInstance MudDialog { get; set; }
     
-    private CreateStudentDto _student = new();
+    private SaveStudentDto _student = new();
     private bool _isCreating;
     private string _errorMessage = string.Empty;
 

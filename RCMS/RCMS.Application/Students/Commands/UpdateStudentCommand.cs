@@ -9,14 +9,14 @@ using RCMS.Shared.Validators;
 
 namespace RCMS.Application.Students.Commands;
 
-public sealed record UpdateStudentCommand(Guid Id, UpdateStudentDto Student) : IRequest<Result<Guid>>;
+public sealed record UpdateStudentCommand(Guid Id, SaveStudentDto Student) : IRequest<Result<Guid>>;
 
 public sealed class UpdateStudentCommandValidator : AbstractValidator<UpdateStudentCommand>
 {
     public UpdateStudentCommandValidator(IStudentRepository studentRepository)
     {
         RuleFor(usd => usd.Student)
-            .SetValidator(new UpdateStudentValidator());
+            .SetValidator(new SaveStudentValidator());
 
         RuleFor(usd => usd)
             .CustomAsync(async (usd, context, ct) =>

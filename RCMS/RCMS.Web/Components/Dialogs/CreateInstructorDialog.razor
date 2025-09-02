@@ -5,8 +5,7 @@
 
 <MudDialog>
     <DialogContent>
-        <InstructorForm TInstructor="CreateInstructorDto"
-                        Instructor="@_instructor" 
+        <InstructorForm Instructor="@_instructor" 
                         ErrorMessage="@_errorMessage"
                         IsSubmitting="_isCreating"
                         OnSubmitButtonClick="CreateInstructorAsync"/>
@@ -20,7 +19,7 @@
 
     [CascadingParameter] public IMudDialogInstance MudDialog { get; set; }
     
-    private CreateInstructorDto _instructor = new();
+    private SaveInstructorDto _instructor = new();
     private bool _isCreating;
     private string _errorMessage = string.Empty;
 

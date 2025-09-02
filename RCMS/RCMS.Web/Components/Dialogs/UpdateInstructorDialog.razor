@@ -5,8 +5,7 @@
 
 <MudDialog>
     <DialogContent>
-        <InstructorForm TInstructor="UpdateInstructorDto"
-                        Instructor="@_instructor" 
+        <InstructorForm Instructor="@_instructor" 
                         ErrorMessage="@_errorMessage"
                         IsLoading="_isLoading"
                         IsSubmitting="_isUpdating"
@@ -24,7 +23,7 @@
     [CascadingParameter] public IMudDialogInstance MudDialog { get; set; }
     [Parameter] public Guid InstructorId { get; set; }
     
-    private UpdateInstructorDto _instructor = new();
+    private SaveInstructorDto _instructor = new();
     private bool _isUpdating;
     private bool _isLoading;
     private bool _isInvalidData;
@@ -41,7 +40,7 @@
             var instructor = await InstructorService.GetInstructorByIdAsync(InstructorId);
 
             // Map instructor to a instructor update model
-            _instructor = new UpdateInstructorDto
+            _instructor = new SaveInstructorDto
             {
                 FirstName = instructor.FirstName,
                 MiddleName = instructor.MiddleName,

@@ -19,10 +19,10 @@ public class StudentsController(IMediator mediator) : BaseController(mediator)
     public async Task<IActionResult> GetStudentByIdAsync(Guid id) => await SendRequestAsync(new GetStudentByIdQuery(id));
     
     [HttpPost, Authorize(Roles = nameof(UserRole.Admin))]
-    public async Task<IActionResult> CreateStudentAsync([FromBody] CreateStudentDto request) => await SendRequestAsync(new CreateStudentCommand(request));
+    public async Task<IActionResult> CreateStudentAsync([FromBody] SaveStudentDto request) => await SendRequestAsync(new CreateStudentCommand(request));
     
     [HttpPut("{id}"), Authorize(Roles = nameof(UserRole.Admin))]
-    public async Task<IActionResult> UpdateStudentAsync(Guid id, [FromBody] UpdateStudentDto request) => await SendRequestAsync(new UpdateStudentCommand(id, request));
+    public async Task<IActionResult> UpdateStudentAsync(Guid id, [FromBody] SaveStudentDto request) => await SendRequestAsync(new UpdateStudentCommand(id, request));
     
     [HttpDelete("{id}"), Authorize(Roles = nameof(UserRole.Admin))]
     public async Task<IActionResult> DeleteStudentAsync(Guid id) => await SendRequestAsync(new DeleteStudentCommand(id));

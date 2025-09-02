@@ -19,7 +19,6 @@ public class InstructorProfile : Profile
             .ForMember(dst => dst.Initials, opt => opt.MapFrom(src => src.GetInitials()))
             .ForMember(dst => dst.LastModifiedAt, opt => opt.MapFrom(src => src.ModifiedAt ?? src.CreatedAt))
             .ForMember(dst => dst.LastModifiedBy, opt => opt.MapFrom(src => src.ModifiedBy ?? src.CreatedBy));
-        CreateMap<CreateInstructorDto, Instructor>();
-        CreateMap<UpdateInstructorDto, Instructor>();
+        CreateMap<SaveInstructorDto, Instructor>();
     }
 }

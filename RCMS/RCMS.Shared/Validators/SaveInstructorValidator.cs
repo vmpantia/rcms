@@ -38,7 +38,3 @@ public class SaveInstructorValidator : AbstractValidator<SaveInstructorDto>
             .WithMessage("Email address it not a valid email address.");
     }
 }
-
-public sealed class CreateInstructorValidator : SaveInstructorValidator;
-
-public sealed class UpdateInstructorValidator : SaveInstructorValidator;

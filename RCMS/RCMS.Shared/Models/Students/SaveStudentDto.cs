@@ -10,6 +10,3 @@ public class SaveStudentDto
     public string PhoneNumber { get; set; }
     public string EmailAddress { get; set; }
 }
-
-public class CreateStudentDto : SaveStudentDto;
-public class UpdateStudentDto : CreateStudentDto;

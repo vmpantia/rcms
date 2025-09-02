@@ -21,7 +21,6 @@ public class StudentProfile : Profile
             .ForMember(dst => dst.NoOfOngoingEnrollments, opt => opt.MapFrom(src => src.Enrollments.Count(e => e.Status == EnrollmentStatus.InProgress)))
             .ForMember(dst => dst.LastModifiedAt, opt => opt.MapFrom(src => src.ModifiedAt ?? src.CreatedAt))
             .ForMember(dst => dst.LastModifiedBy, opt => opt.MapFrom(src => src.ModifiedBy ?? src.CreatedBy));
-        CreateMap<CreateStudentDto, Student>();
-        CreateMap<UpdateStudentDto, Student>();
+        CreateMap<SaveStudentDto, Student>();
     }
 }

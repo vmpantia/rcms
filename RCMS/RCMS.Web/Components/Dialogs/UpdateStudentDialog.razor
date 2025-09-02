@@ -5,8 +5,7 @@
 
 <MudDialog>
     <DialogContent>
-        <StudentForm TStudent="UpdateStudentDto"
-                     Student="@_student" 
+        <StudentForm Student="@_student" 
                      ErrorMessage="@_errorMessage"
                      IsLoading="_isLoading"
                      IsSubmitting="_isUpdating"
@@ -24,7 +23,7 @@
     [CascadingParameter] public IMudDialogInstance MudDialog { get; set; }
     [Parameter] public Guid StudentId { get; set; }
     
-    private UpdateStudentDto _student = new();
+    private SaveStudentDto _student = new();
     private bool _isUpdating;
     private bool _isLoading;
     private bool _isInvalidData;
@@ -41,7 +40,7 @@
             var student = await StudentService.GetStudentByIdAsync(StudentId);
 
             // Map student to a student update model
-            _student = new UpdateStudentDto
+            _student = new SaveStudentDto
             {
                 FirstName = student.FirstName,
                 MiddleName = student.MiddleName,

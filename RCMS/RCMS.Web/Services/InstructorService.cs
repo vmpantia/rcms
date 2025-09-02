@@ -36,7 +36,7 @@ public class InstructorService(IHttpClientProvider httpClientProvider, ILogger<A
         }
     }
     
-    public async Task CreateInstructorAsync(CreateInstructorDto request)
+    public async Task CreateInstructorAsync(SaveInstructorDto request)
     {
         try
         {
@@ -50,7 +50,7 @@ public class InstructorService(IHttpClientProvider httpClientProvider, ILogger<A
         }
     }
     
-    public async Task UpdateInstructorAsync(Guid id, UpdateInstructorDto request)
+    public async Task UpdateInstructorAsync(Guid id, SaveInstructorDto request)
     {
         try
         {

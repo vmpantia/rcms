@@ -36,7 +36,7 @@ public class StudentService(IHttpClientProvider httpClientProvider, ILogger<Auth
         }
     }
     
-    public async Task CreateStudentAsync(CreateStudentDto request)
+    public async Task CreateStudentAsync(SaveStudentDto request)
     {
         try
         {
@@ -50,7 +50,7 @@ public class StudentService(IHttpClientProvider httpClientProvider, ILogger<Auth
         }
     }
     
-    public async Task UpdateStudentAsync(Guid id, UpdateStudentDto request)
+    public async Task UpdateStudentAsync(Guid id, SaveStudentDto request)
     {
         try
         {
