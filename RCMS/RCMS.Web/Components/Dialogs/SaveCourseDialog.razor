@@ -1,13 +1,17 @@
 @using RCMS.Shared.Models.Courses
 @using RCMS.Web.Components.Forms
 @using RCMS.Web.Components.Controls
+@using RCMS.Web.Interfaces.Helpers
 @using RCMS.Web.Interfaces.Services
 @using RCMS.Web.Models
 
 <MudDialog>
     <DialogContent>
         <InputForm TData="SaveCourseDto"
-                   Data="_course">
+                   Data="_course"
+                   ErrorMessage="@_errorMessage"
+                   IsLoading="_isLoading"
+                   OnSubmitButtonClick="SaveCourseAsync">
             <FieldContent>
                 <MudItem xs="12">
                     <TextField Label="Name"
@@ -40,6 +44,10 @@
 @code {
     
     [Inject] public ICourseService CourseService { get; set; }
+    [Inject] public IDialogHelper DialogHelper { get; set; }
+    [Inject] public ISnackbar Snackbar { get; set; }
+    
+    [CascadingParameter] public IMudDialogInstance MudDialog { get; set; }
     
     [Parameter] public Guid? CourseId { get; set; }
 
@@ -70,6 +78,50 @@
         finally
         {
             _isLoading = false;
+        }
+    }
+
+    private async Task SaveCourseAsync()
+    {
+        if (CourseId.HasValue)
+        {
+            await HandleCourseActionAsync("Confirm Creation", 
+                "Are you sure you want to update this course?", 
+                () => CourseService.UpdateCourseAsync((Guid)CourseId, _course), 
+                "Course updated successfully.");
+        }
+        else
+        {
+            await HandleCourseActionAsync("Confirm Creation", 
+                "Are you sure you want to create this course?", 
+                () => CourseService.CreateCourseAsync(_course), 
+                "Course created successfully.");
+        }
+    }
+    
+    private async Task HandleCourseActionAsync(string confirmTitle, string confirmMessage, Func<Task> action, string successMessage)
+    {
+        try
+        {
+            var isConfirmed = await DialogHelper.ShowMessageDialogAsync(confirmTitle, confirmMessage);
+            if (!isConfirmed) return;
+
+            StateHasChanged();
+            _errorMessage = string.Empty;
+            _isSubmitting = true;
+
+            await action.Invoke();
+
+            Snackbar.Add(successMessage, Severity.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+        }
+        finally
+        {
+            _isSubmitting = false;
         }
     }
 

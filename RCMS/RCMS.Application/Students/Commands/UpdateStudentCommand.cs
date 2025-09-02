@@ -15,14 +15,14 @@ public sealed class UpdateStudentCommandValidator : AbstractValidator<UpdateStud
 {
     public UpdateStudentCommandValidator(IStudentRepository studentRepository)
     {
-        RuleFor(usd => usd.Student)
+        RuleFor(usc => usc.Student)
             .SetValidator(new SaveStudentValidator());
 
-        RuleFor(usd => usd)
-            .CustomAsync(async (usd, context, ct) =>
+        RuleFor(usc => usc)
+            .CustomAsync(async (usc, context, ct) =>
             {
                 // Get data stored on the database using id
-                var dataToUpdate = await studentRepository.GetOneAsync(s => s.Id == usd.Id, ct);
+                var dataToUpdate = await studentRepository.GetOneAsync(s => s.Id == usc.Id, ct);
                 
                 // Check if data exists
                 if (dataToUpdate is null)
@@ -32,24 +32,24 @@ public sealed class UpdateStudentCommandValidator : AbstractValidator<UpdateStud
                 }
 
                 // Check if any changes made on the student
-                if (usd.Student.FirstName == dataToUpdate.FirstName &&
-                    usd.Student.MiddleName == dataToUpdate.MiddleName &&
-                    usd.Student.LastName == dataToUpdate.LastName &&
-                    usd.Student.Gender == dataToUpdate.Gender.ToString() &&
-                    usd.Student.BirthDate == dataToUpdate.BirthDate &&
-                    usd.Student.PhoneNumber == dataToUpdate.PhoneNumber &&
-                    usd.Student.EmailAddress == dataToUpdate.EmailAddress)
+                if (usc.Student.FirstName == dataToUpdate.FirstName &&
+                    usc.Student.MiddleName == dataToUpdate.MiddleName &&
+                    usc.Student.LastName == dataToUpdate.LastName &&
+                    usc.Student.Gender == dataToUpdate.Gender.ToString() &&
+                    usc.Student.BirthDate == dataToUpdate.BirthDate &&
+                    usc.Student.PhoneNumber == dataToUpdate.PhoneNumber &&
+                    usc.Student.EmailAddress == dataToUpdate.EmailAddress)
                     context.AddFailure("No changes made on the student.");
             });
 
-        RuleFor(usd => usd)
-            .MustAsync(async (usd, ct) =>
+        RuleFor(usc => usc)
+            .MustAsync(async (usc, ct) =>
             {
                 // Check if the student already exists on the database by checking first name and last name with different id
                 var result = await studentRepository.IsExistAsync(
-                    expression: s => s.Id != usd.Id && 
-                                     s.FirstName == usd.Student.FirstName && 
-                                     s.LastName == usd.Student.LastName,
+                    expression: s => s.Id != usc.Id && 
+                                     s.FirstName == usc.Student.FirstName && 
+                                     s.LastName == usc.Student.LastName,
                     cancellationToken: ct);
                 return !result;
             })

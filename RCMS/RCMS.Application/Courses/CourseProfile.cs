@@ -11,5 +11,9 @@ public class CourseProfile : Profile
         CreateMap<CourseCategory, CourseCategoryDto>()
             .ForMember(dst => dst.LastModifiedAt, opt => opt.MapFrom(src => src.ModifiedAt ?? src.CreatedAt))
             .ForMember(dst => dst.LastModifiedBy, opt => opt.MapFrom(src => src.ModifiedBy ?? src.CreatedBy));
+        CreateMap<Course, CourseDto>()
+            .ForMember(dst => dst.LastModifiedAt, opt => opt.MapFrom(src => src.ModifiedAt ?? src.CreatedAt))
+            .ForMember(dst => dst.LastModifiedBy, opt => opt.MapFrom(src => src.ModifiedBy ?? src.CreatedBy));
+        CreateMap<SaveCourseDto, Course>();
     }
 }

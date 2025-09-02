@@ -15,14 +15,14 @@ public sealed class UpdateInstructorCommandValidator : AbstractValidator<UpdateI
 {
     public UpdateInstructorCommandValidator(IInstructorRepository instructorRepository)
     {
-        RuleFor(usd => usd.Instructor)
+        RuleFor(uic => uic.Instructor)
             .SetValidator(new SaveInstructorValidator());
 
-        RuleFor(usd => usd)
-            .CustomAsync(async (usd, context, ct) =>
+        RuleFor(uic => uic)
+            .CustomAsync(async (uic, context, ct) =>
             {
                 // Get data stored on the database using an id
-                var dataToUpdate = await instructorRepository.GetOneAsync(s => s.Id == usd.Id, ct);
+                var dataToUpdate = await instructorRepository.GetOneAsync(i => i.Id == uic.Id, ct);
                 
                 // Check if data exists
                 if (dataToUpdate is null)
@@ -32,24 +32,24 @@ public sealed class UpdateInstructorCommandValidator : AbstractValidator<UpdateI
                 }
 
                 // Check if any changes made on the data
-                if (usd.Instructor.FirstName == dataToUpdate.FirstName &&
-                    usd.Instructor.MiddleName == dataToUpdate.MiddleName &&
-                    usd.Instructor.LastName == dataToUpdate.LastName &&
-                    usd.Instructor.Gender == dataToUpdate.Gender.ToString() &&
-                    usd.Instructor.BirthDate == dataToUpdate.BirthDate &&
-                    usd.Instructor.PhoneNumber == dataToUpdate.PhoneNumber &&
-                    usd.Instructor.EmailAddress == dataToUpdate.EmailAddress)
+                if (uic.Instructor.FirstName == dataToUpdate.FirstName &&
+                    uic.Instructor.MiddleName == dataToUpdate.MiddleName &&
+                    uic.Instructor.LastName == dataToUpdate.LastName &&
+                    uic.Instructor.Gender == dataToUpdate.Gender.ToString() &&
+                    uic.Instructor.BirthDate == dataToUpdate.BirthDate &&
+                    uic.Instructor.PhoneNumber == dataToUpdate.PhoneNumber &&
+                    uic.Instructor.EmailAddress == dataToUpdate.EmailAddress)
                     context.AddFailure("No changes made on the instructor.");
             });
 
-        RuleFor(usd => usd)
-            .MustAsync(async (usd, ct) =>
+        RuleFor(uic => uic)
+            .MustAsync(async (uic, ct) =>
             {
                 // Check if the data already exists on the database
                 var result = await instructorRepository.IsExistAsync(
-                    expression: s => s.Id != usd.Id && 
-                                     s.FirstName == usd.Instructor.FirstName && 
-                                     s.LastName == usd.Instructor.LastName,
+                    expression: i => i.Id != uic.Id && 
+                                     i.FirstName == uic.Instructor.FirstName && 
+                                     i.LastName == uic.Instructor.LastName,
                     cancellationToken: ct);
                 return !result;
             })

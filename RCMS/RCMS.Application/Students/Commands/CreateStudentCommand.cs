@@ -19,11 +19,11 @@ public sealed class CreateStudentCommandValidator : AbstractValidator<CreateStud
             .SetValidator(new SaveStudentValidator());
 
         RuleFor(csc => csc.Student)
-            .MustAsync(async (csd, ct) =>
+            .MustAsync(async (ssd, ct) =>
             {
                 // Check if the data already exists on the database
                 var result = await studentRepository.IsExistAsync(
-                    expression: s => s.FirstName == csd.FirstName && s.LastName == csd.LastName,
+                    expression: s => s.FirstName == ssd.FirstName && s.LastName == ssd.LastName,
                     cancellationToken: ct);
                 return !result;
             })

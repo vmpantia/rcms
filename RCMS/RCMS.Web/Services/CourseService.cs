@@ -35,4 +35,32 @@ public class CourseService(IHttpClientProvider httpClientProvider, ILogger<Cours
             throw;
         }
     }
+    
+    public async Task CreateCourseAsync(SaveCourseDto request)
+    {
+        try
+        {
+            // Send creating of course request to API
+            await httpClientProvider.PostAsync<Guid>("https://localhost:7226/api/Courses", request);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError($"Error in creating course. | {ex.Message}");
+            throw;
+        }
+    }
+
+    public async Task UpdateCourseAsync(Guid courseId, SaveCourseDto request)
+    {
+        try
+        {
+            // Send updating of course request to API
+            await httpClientProvider.PutAsync<Guid>("https://localhost:7226/api/Courses", request);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError($"Error in updating course. | {ex.Message}");
+            throw;
+        }
+    }
 }

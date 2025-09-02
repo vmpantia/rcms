@@ -15,15 +15,15 @@ public sealed class CreateInstructorCommandValidator : AbstractValidator<CreateI
 {
     public CreateInstructorCommandValidator(IInstructorRepository instructorRepository)
     {
-        RuleFor(csc => csc.Instructor)
+        RuleFor(cic => cic.Instructor)
             .SetValidator(new SaveInstructorValidator());
 
-        RuleFor(csc => csc.Instructor)
-            .MustAsync(async (csd, ct) =>
+        RuleFor(cic => cic.Instructor)
+            .MustAsync(async (sid, ct) =>
             {
                 // Check if the data already exists on the database
                 var result = await instructorRepository.IsExistAsync(
-                    expression: s => s.FirstName == csd.FirstName && s.LastName == csd.LastName,
+                    expression: i => i.FirstName == sid.FirstName && i.LastName == sid.LastName,
                     cancellationToken: ct);
                 return !result;
             })
