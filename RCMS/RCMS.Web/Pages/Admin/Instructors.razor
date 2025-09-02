@@ -85,7 +85,7 @@
     {
         var title = dto is null ? "Create Instructor" : "Update Instructor";
         var parameters = new DialogParameters<SaveInstructorDialog> { { sid => sid.InstructorId, dto?.Id } };
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, BackdropClick = false };
         
         // Handle dialog result
         var result = await DialogHelper.ShowDialogAsync<SaveInstructorDialog>(title, parameters, options);

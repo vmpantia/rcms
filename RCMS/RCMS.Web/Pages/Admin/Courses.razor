@@ -68,7 +68,7 @@
     {
         var title = dto is null ? "Create Course" : "Update Course";
         var parameters = new DialogParameters<SaveCourseDialog> { { svd => svd.CourseId, dto?.Id } };
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, BackdropClick = false };
         
         // Handle dialog result
         var result = await DialogHelper.ShowDialogAsync<SaveCourseDialog>(title, parameters, options);

@@ -7,7 +7,15 @@
         <InputForm TData="SaveCourseDto"
                    Data="_course">
             <FieldContent>
-                <TextEditor Label="Description" />
+                <MudItem xs="12">
+                    <TextField Label="Name"
+                               @bind-Value="_course.Name"
+                               For="@(() => _course.Name)"
+                               IsDisabled="IsFormDisabled"/>
+                </MudItem>
+                <MudItem xs="12">
+                    <TextEditor Label="Description"/>
+                </MudItem>
             </FieldContent>
         </InputForm>
     </DialogContent>
@@ -17,6 +25,12 @@
     
     [Parameter] public Guid? CourseId { get; set; }
 
+    private bool IsFormDisabled => _isSubmitting || _isInvalidData;
+    
     private SaveCourseDto _course = new();
+    private string _errorMessage;
+    private bool _isLoading;
+    private bool _isSubmitting;
+    private bool _isInvalidData;
     
 }

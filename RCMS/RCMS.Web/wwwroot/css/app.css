@@ -115,7 +115,11 @@ code {
 
 .ql-container {
     border: none !important;
-    box-shadow: none !important;
+    box-shadow: none !important;    
+    height: 150px !important; /* or any value you prefer */
+    max-height: 500px;
+    overflow-y: auto;
+
 }
 
 .ql-toolbar {

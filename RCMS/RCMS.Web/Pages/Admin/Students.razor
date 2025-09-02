@@ -85,7 +85,7 @@
     {
         var title = dto is null ? "Create Student" : "Update Student";
         var parameters = new DialogParameters<SaveStudentDialog> { { ssd => ssd.StudentId, dto?.Id } };
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, BackdropClick = false };
         
         // Handle dialog result
         var result = await DialogHelper.ShowDialogAsync<SaveStudentDialog>(title, parameters, options);

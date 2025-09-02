@@ -8,30 +8,30 @@ public class SaveStudentValidator : AbstractValidator<SaveStudentDto>
 {
     public SaveStudentValidator()
     {
-        RuleFor(csd => csd.FirstName)
+        RuleFor(ssd => ssd.FirstName)
             .NotEmpty()
             .WithMessage("First Name is required.");
-        RuleFor(csd => csd.LastName)
+        RuleFor(ssd => ssd.LastName)
             .NotEmpty()
             .WithMessage("Last Name is required.");
-        RuleFor(csd => csd.Gender)
+        RuleFor(ssd => ssd.Gender)
             .NotEmpty()
             .WithMessage("Gender is required.");
-        RuleFor(csd => csd.BirthDate)
+        RuleFor(ssd => ssd.BirthDate)
             .NotEmpty()
             .WithMessage("Birthday is required.")
             .Must(value => value?.Date < DateTime.Today)
             .WithMessage("Birthdate must be less than today.")
             .Must(value => value.GetAge() >= Constant.MINIMUM_AGE)
             .WithMessage($"Student must be at least {Constant.MINIMUM_AGE} years old.");
-        RuleFor(csd => csd.PhoneNumber)
+        RuleFor(ssd => ssd.PhoneNumber)
             .NotEmpty()
             .WithMessage("Phone number is required.")
             .Must(value => decimal.TryParse(value, out _))
             .WithMessage("Phone number must be a number.")
             .Length(Constant.PHONE_NUMBER_LENGTH)
             .WithMessage("Phone number must be 11 digits long.");
-        RuleFor(csd => csd.EmailAddress)
+        RuleFor(ssd => ssd.EmailAddress)
             .NotEmpty()
             .WithMessage("Email address is required.")
             .EmailAddress()
