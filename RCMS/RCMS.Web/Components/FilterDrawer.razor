@@ -1,3 +1,4 @@
+@using RCMS.Web.Components.Controls
 
 <MudDrawer Anchor="Anchor" Open="Open" OpenChanged="OpenChanged"
            Elevation="1" Variant="@DrawerVariant.Temporary"
@@ -6,9 +7,20 @@
         <MudIcon Class="mr-3" Icon="@Icons.Material.Filled.ManageSearch" />
         <MudText Typo="Typo.h6" Style="font-weight: bold;">@Title</MudText>
     </MudDrawerHeader>
-    <div class="pa-6">
-        @ChildContent
-    </div>
+    @if (ChildContent is not null)
+    {
+        <div class="pa-6">
+            <MudGrid>
+                @ChildContent
+                <MudItem xs="12">
+                    <div class="d-flex justify-end flex-grow-1 gap-4">
+                        <Button Text="Apply" OnButtonClick="OnApplyButtonClick" IsFullWidth="false"></Button>
+                        <Button Text="Clear" OnButtonClick="OnClearButtonClick" IsFullWidth="false" Variant="Variant.Outlined"></Button>
+                    </div>
+                </MudItem>
+            </MudGrid>
+        </div>
+    }
 </MudDrawer>
 
 @code {
@@ -17,6 +29,8 @@
     [Parameter] public Anchor Anchor { get; set; } = Anchor.End;
     [Parameter] public bool Open { get; set; }
     [Parameter] public EventCallback<bool> OpenChanged { get; set; }
-    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public EventCallback OnApplyButtonClick { get; set; }
+    [Parameter] public EventCallback OnClearButtonClick { get; set; }
 
 }

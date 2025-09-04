@@ -19,7 +19,7 @@
                           IsLoading="_isLoading">
                     <Toolbar>
                         <MudSpacer />
-                        <IconButton Icon="@Icons.Material.Filled.FilterAlt"
+                        <IconButton Icon="@Icons.Material.Filled.ManageSearch"
                                     Text="Filter Categories"
                                     OnButtonClick="@(() => _isShowFilter = !_isShowFilter)"/>
                     </Toolbar>
@@ -40,24 +40,20 @@
     </ChildComponent>
 </PageContent>
 
-<FilterDrawer Title="Filter Categories" @bind-Open="@_isShowFilter">
-    <MudGrid>
-        <MudItem xs="12">
-            <TextField Label="Name"
-                       @bind-Value="_filter.Name"
-                       HelperText="Filter by Category Name"/>
-        </MudItem>
-        <MudItem xs="12">
-            <SelectField Label="Status"
-                         @bind-SelectedValues="_filter.Statuses"
-                         IsMultipleSelection="true"
-                         Options="@(Enum.GetValues<CourseCategoryStatus>().Select(gt => new SelectFieldOption(gt.ToString())))"
-                         HelperText="Filter by Category Statuses"/>
-        </MudItem>
-        <MudItem xs="12">
-            <Button Text="Apply" OnButtonClick="FilterCourseCategoriesAsync"></Button>
-        </MudItem>
-    </MudGrid>
+<FilterDrawer Title="Filter Categories" @bind-Open="@_isShowFilter" 
+              OnApplyButtonClick="ApplyFilterAsync" OnClearButtonClick="ClearFilterAsync">
+    <MudItem xs="12">
+        <TextField Label="Name"
+                   @bind-Value="_filter.Name"
+                   HelperText="Filter by Category Name"/>
+    </MudItem>
+    <MudItem xs="12">
+        <SelectField Label="Status"
+                     @bind-SelectedValues="_filter.Statuses"
+                     IsMultipleSelection="true"
+                     Options="@(Enum.GetValues<CourseCategoryStatus>().Select(gt => new SelectFieldOption(gt.ToString())))"
+                     HelperText="Filter by Category Statuses"/>
+    </MudItem>
 </FilterDrawer>
 
 @code {
@@ -73,6 +69,21 @@
     protected override async Task OnInitializedAsync()
     {
         await FilterCourseCategoriesAsync();
+    }
+
+    private async Task ApplyFilterAsync()
+    {
+        await FilterCourseCategoriesAsync();
+        
+        _isShowFilter = false;
+    }
+
+    private async Task ClearFilterAsync()
+    {
+        _filter = new();
+        await FilterCourseCategoriesAsync();
+        
+        _isShowFilter = false;
     }
 
     private async Task FilterCourseCategoriesAsync()
