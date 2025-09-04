@@ -1,22 +1,18 @@
 @typeparam TData 
 
-@if (Toolbar is not null)
-{
-    <div class="d-flex mb-3">
-        @Toolbar
-    </div>
-}
-
 <MudDataGrid Items="Items"
              Loading="IsLoading"
              Dense="true"
              Hover="true"
              MultiSelection="IsMultipleSelection"
              SelectedItems="SelectedItems">
+    <ToolBarContent>
+        @Toolbar
+    </ToolBarContent>
     <Columns>
         @if (IsMultipleSelection)
         {
-            <SelectColumn T="TData" />
+            <SelectColumn T="TData"/>
         }
         @Columns
     </Columns>

@@ -23,7 +23,7 @@
                     <Toolbar>
                         <IconButton Icon="@Icons.Material.Filled.PersonAdd"
                                     Text="Create Student"
-                                    OnButtonClick="() => OpenSaveStudentDialog()"/>
+                                    OnButtonClick="() => OpenSaveStudentDialogAsync()"/>
                         <IconButton Icon="@Icons.Material.Filled.Delete"
                                     Text="Delete Student(s)"
                                     IsDisabled="@(!_selectedStudents.Any())"
@@ -42,7 +42,7 @@
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn TData="StudentLiteDto" Title="Action">
                             <MudMenu Icon="@Icons.Material.Filled.MoreHoriz">
-                                <MudMenuItem Label="Edit" OnClick="() => OpenSaveStudentDialog(context)"/>
+                                <MudMenuItem Label="Edit" OnClick="() => OpenSaveStudentDialogAsync(context)"/>
                                 <MudMenuItem Label="Delete" OnClick="() => DeleteStudentAsync(context)"/>
                             </MudMenu>
                         </DataGridTemplateColumn>
@@ -81,7 +81,7 @@
         }
     }
  
-    private async Task OpenSaveStudentDialog(StudentLiteDto? dto = null)
+    private async Task OpenSaveStudentDialogAsync(StudentLiteDto? dto = null)
     {
         var title = dto is null ? "Create Student" : "Update Student";
         var parameters = new DialogParameters<SaveStudentDialog> { { ssd => ssd.StudentId, dto?.Id } };

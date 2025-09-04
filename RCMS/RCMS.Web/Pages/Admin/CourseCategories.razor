@@ -7,6 +7,7 @@
 @using RCMS.Web.Components.Texts
 @using RCMS.Web.Components.Chips
 @using RCMS.Web.Components.Controls
+@using RCMS.Web.Models
 
 @attribute [Authorize(Roles = nameof(UserRole.Admin))]
 
@@ -19,7 +20,8 @@
                     <Toolbar>
                         <MudSpacer />
                         <IconButton Icon="@Icons.Material.Filled.FilterAlt"
-                                    Text="Filter Categories" />
+                                    Text="Filter Categories"
+                                    OnButtonClick="@(() => _isShowFilter = !_isShowFilter)"/>
                     </Toolbar>
                     <Columns>
                         <DataGridPropertyColumn TData="CourseCategoryDto" Title="Name" Property="cc => cc.Name"/>
@@ -38,6 +40,26 @@
     </ChildComponent>
 </PageContent>
 
+<FilterDrawer Title="Filter Categories" @bind-Open="@_isShowFilter">
+    <MudGrid>
+        <MudItem xs="12">
+            <TextField Label="Name"
+                       @bind-Value="_filter.Name"
+                       HelperText="Filter by Category Name"/>
+        </MudItem>
+        <MudItem xs="12">
+            <SelectField Label="Status"
+                         @bind-SelectedValues="_filter.Statuses"
+                         IsMultipleSelection="true"
+                         Options="@(Enum.GetValues<CourseCategoryStatus>().Select(gt => new SelectFieldOption(gt.ToString())))"
+                         HelperText="Filter by Category Statuses"/>
+        </MudItem>
+        <MudItem xs="12">
+            <Button Text="Apply" OnButtonClick="FilterCourseCategoriesAsync"></Button>
+        </MudItem>
+    </MudGrid>
+</FilterDrawer>
+
 @code {
     
     [Inject] public ICourseService CourseService { get; set; }
@@ -46,8 +68,14 @@
     private FilterCourseCategory _filter = new();
     private IEnumerable<CourseCategoryDto> _categories = new List<CourseCategoryDto>();
     private bool _isLoading = true;
+    private bool _isShowFilter = false;
 
     protected override async Task OnInitializedAsync()
+    {
+        await FilterCourseCategoriesAsync();
+    }
+
+    private async Task FilterCourseCategoriesAsync()
     {
         try
         {
