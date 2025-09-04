@@ -48,9 +48,8 @@
                    HelperText="Filter by Category Name"/>
     </MudItem>
     <MudItem xs="12">
-        <SelectField Label="Status"
+        <SelectMultipleField Label="Status"
                      @bind-SelectedValues="_filter.Statuses"
-                     IsMultipleSelection="true"
                      Options="@(Enum.GetValues<CourseCategoryStatus>().Select(gt => new SelectFieldOption(gt.ToString())))"
                      HelperText="Filter by Category Statuses"/>
     </MudItem>
