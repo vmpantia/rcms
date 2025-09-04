@@ -9,6 +9,7 @@
 @using RCMS.Web.Components.Dialogs
 @using RCMS.Web.Interfaces.Helpers
 @using RCMS.Web.Interfaces.Services
+@using RCMS.Web.Models
 
 @attribute [Authorize(Roles = nameof(UserRole.Admin))]
 
@@ -28,6 +29,10 @@
                                     Text="Delete Student(s)"
                                     IsDisabled="@(!_selectedStudents.Any())"
                                     OnButtonClick="DeleteStudentsAsync"/>
+                        <MudSpacer />
+                        <IconButton Icon="@Icons.Material.Filled.ManageSearch"
+                                    Text="Filter Categories"
+                                    OnButtonClick="@(() => _isShowFilter = !_isShowFilter)"/>
                     </Toolbar>
                     <Columns>
                         <DataGridPropertyColumn TData="StudentLiteDto" Title="Name" Property="s => s.Name"/>
@@ -53,23 +58,81 @@
     </ChildComponent>
 </PageContent>
 
+<FilterDrawer Title="Filter Students" @bind-Open="@_isShowFilter" 
+              OnApplyButtonClick="ApplyFilterAsync" OnClearButtonClick="ClearFilterAsync">
+    <MudItem xs="12">
+        <TextField Label="First Name"
+                   @bind-Value="_filter.FirstName"
+                   HelperText="Filter by student first name"/>
+    </MudItem>
+    <MudItem xs="12">
+        <TextField Label="Last Name"
+                   @bind-Value="_filter.LastName"
+                   HelperText="Filter by student last name"/>
+    </MudItem>
+    <MudItem xs="12">
+        <TextField Label="Phone Number"
+                   @bind-Value="_filter.LastName"
+                   HelperText="Filter by student phone number"/>
+    </MudItem>
+    <MudItem xs="12">
+        <TextField Label="Email Address"
+                   @bind-Value="_filter.LastName"
+                   HelperText="Filter by student email address"/>
+    </MudItem>
+    <MudItem xs="12">
+        <SelectMultipleField Label="Gender"
+                             @bind-SelectedValues="_filter.Genders"
+                             Options="@(Enum.GetValues<GenderType>().Select(gt => new SelectFieldOption(gt.ToString())))"
+                             HelperText="Filter by student genders"/>
+    </MudItem>
+    <MudItem xs="12">
+        <SelectMultipleField Label="Status"
+                             @bind-SelectedValues="_filter.Statuses"
+                             Options="@(Enum.GetValues<StudentStatus>().Select(gt => new SelectFieldOption(gt.ToString())))"
+                             HelperText="Filter by student statuses"/>
+    </MudItem>
+</FilterDrawer>
+
 @code {
     
     [Inject] public IStudentService StudentService { get; set; }
     [Inject] public ISnackbar Snackbar { get; set; }
     [Inject] public IDialogHelper DialogHelper { get; set; }
 
+    private FilterStudent _filter = new();
     private IEnumerable<StudentLiteDto> _students = new List<StudentLiteDto>();
     private HashSet<StudentLiteDto> _selectedStudents = new();
     private bool _isLoading = true;
+    private bool _isShowFilter = false;
 
     protected override async Task OnInitializedAsync()
+    {
+        await FilterStudentsAsync();
+    }
+
+    private async Task ApplyFilterAsync()
+    {
+        await FilterStudentsAsync();
+        
+        _isShowFilter = false;
+    }
+
+    private async Task ClearFilterAsync()
+    {
+        _filter = new();
+        await FilterStudentsAsync();
+        
+        _isShowFilter = false;
+    }
+
+    private async Task FilterStudentsAsync()
     {
         try
         {
             _isLoading = true;
             _selectedStudents = new();
-            _students = await StudentService.GetStudentsAsync();
+            _students = await StudentService.GetStudentsAsync(_filter);
         }
         catch (Exception ex)
         {

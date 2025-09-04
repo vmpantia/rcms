@@ -6,12 +6,12 @@ namespace RCMS.Web.Services;
 
 public class StudentService(IHttpClientProvider httpClientProvider, ILogger<AuthService> logger) : IStudentService
 {
-    public async Task<IEnumerable<StudentLiteDto>> GetStudentsAsync()
+    public async Task<IEnumerable<StudentLiteDto>> GetStudentsAsync(FilterStudent filter)
     {
         try
         {
             // Send getting of students request to API
-            var students = await httpClientProvider.GetAsync<IEnumerable<StudentLiteDto>>("https://localhost:7226/api/Students");
+            var students = await httpClientProvider.PostAsync<IEnumerable<StudentLiteDto>>("https://localhost:7226/api/Students/Filter", filter);
             return students;
         }
         catch (Exception ex)

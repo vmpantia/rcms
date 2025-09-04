@@ -12,8 +12,8 @@ namespace RCMS.Api.Controllers;
 [Route("api/[controller]")]
 public class StudentsController(IMediator mediator) : BaseController(mediator)
 {
-    [HttpGet, Authorize(Roles = nameof(UserRole.Admin))]
-    public async Task<IActionResult> GetStudentsAsync() => await SendRequestAsync(new GetStudentsQuery());
+    [HttpPost("Filter"), Authorize(Roles = nameof(UserRole.Admin))]
+    public async Task<IActionResult> GetStudentsAsync([FromBody] FilterStudent filter) => await SendRequestAsync(new GetStudentsQuery(filter));
     
     [HttpGet("{id}"), Authorize(Roles = nameof(UserRole.Admin))]
     public async Task<IActionResult> GetStudentByIdAsync(Guid id) => await SendRequestAsync(new GetStudentByIdQuery(id));

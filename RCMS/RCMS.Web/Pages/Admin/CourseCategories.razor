@@ -45,13 +45,13 @@
     <MudItem xs="12">
         <TextField Label="Name"
                    @bind-Value="_filter.Name"
-                   HelperText="Filter by Category Name"/>
+                   HelperText="Filter by category name"/>
     </MudItem>
     <MudItem xs="12">
         <SelectMultipleField Label="Status"
                      @bind-SelectedValues="_filter.Statuses"
                      Options="@(Enum.GetValues<CourseCategoryStatus>().Select(gt => new SelectFieldOption(gt.ToString())))"
-                     HelperText="Filter by Category Statuses"/>
+                     HelperText="Filter by category statuses"/>
     </MudItem>
 </FilterDrawer>
 
